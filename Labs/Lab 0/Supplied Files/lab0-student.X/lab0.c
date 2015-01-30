@@ -28,8 +28,15 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 
 typedef enum stateTypeEnum{
     //TODO: Define states by name
-    LEF_OFF, LED_ONE, LED_TWO, LED_THREE, LED_FOUR
+    LED_OFF, LED_ONE, LED_TWO, LED_THREE, LED_FOUR
 } stateType;
+
+#define PRESSED 0
+#define NOTPRESSED 1
+
+stateType CurrentState = LED_OFF;
+stateType NextState;
+stateType BackState;
 
 
 int main(void)
@@ -48,6 +55,30 @@ int main(void)
 //        switch(){
 //
 //        }
+        switch (CurrentState){
+            case LED_OFF:
+
+
+            break;
+
+            case LED_ONE:
+
+            break;
+
+            case LED_TWO:
+                
+            break;
+
+            case LED_THREE:
+
+            break;
+
+            case LED_FOUR:
+
+            break;
+        }
+
+
     }
     return 0;
 }
