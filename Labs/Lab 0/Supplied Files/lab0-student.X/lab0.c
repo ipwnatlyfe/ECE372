@@ -42,7 +42,7 @@ stateType BackState;
 int main(void)
 {
 
-
+;
 
     //TODO: Finish these functions in the provided c files
     initLEDs();

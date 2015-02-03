@@ -15,10 +15,10 @@ void initLEDs(){
     TRISBbits.TRISB14 = 0;
     TRISBbits.TRISB15 = 0;
     //TODO: Turn each LED OFF
-    LATBbits.LATB12 = 0;
-    LATBbits.LATB13 = 0;
-    LATBbits.LATB14 = 0;
-    LATBbits.LATB15 = 0;
+    LATBbits.LATB12 = 1;
+    LATBbits.LATB13 = 1;
+    LATBbits.LATB14 = 1;
+    LATBbits.LATB15 = 1;
 
 }
 
