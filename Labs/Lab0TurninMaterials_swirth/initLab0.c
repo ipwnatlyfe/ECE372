@@ -41,8 +41,8 @@ void initTimer1(){
     //TODO: Initialize the timer
     T2CONbits.T32 = 1;
     T2CONbits.TCKPS = 0b00;
-    PR3 = TIMERHIGH;
-    PR2 = TIMERLOW;
+    PR3 = 449;
+    PR2 = 65535;
     IEC0bits.T3IE = 1;
     IFS0bits.T3IF = 0;              // Put the interrupt flag down
    // T2CONbits.TON = 1;            // turn timer 2 on
