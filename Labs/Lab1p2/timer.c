@@ -15,7 +15,13 @@
 //Uses timer 2
 void delayUs(unsigned int delay){
     //TODO: Create a delay using timer 2 for "delay" microseconds.
-
+    TMR2 = 0;
+    PR2 = delay*14;
+    IFS0bits.T2IF = 0;
+    T2CONbits.TCKPS = 0;
+    T2CONbits.TON = 1;
+    while(IFS0bits.T2IF == 0);
+    T2CONbits.TON = 0;
 }
 
 void Timer1Delay(unsigned int delay)

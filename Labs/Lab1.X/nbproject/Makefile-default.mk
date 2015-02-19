@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../Lab1/Code/labp1.c ../Lab1/Code/leds.c ../Lab1/Code/timer.c
+SOURCEFILES_QUOTED_IF_SPACED=../Lab1p2/timer.c ../Lab1p2/lab1p2.c ../Lab1p2/lcd.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/208066743/labp1.o ${OBJECTDIR}/_ext/208066743/leds.o ${OBJECTDIR}/_ext/208066743/timer.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/208066743/labp1.o.d ${OBJECTDIR}/_ext/208066743/leds.o.d ${OBJECTDIR}/_ext/208066743/timer.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1942262699/timer.o ${OBJECTDIR}/_ext/1942262699/lab1p2.o ${OBJECTDIR}/_ext/1942262699/lcd.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1942262699/timer.o.d ${OBJECTDIR}/_ext/1942262699/lab1p2.o.d ${OBJECTDIR}/_ext/1942262699/lcd.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/208066743/labp1.o ${OBJECTDIR}/_ext/208066743/leds.o ${OBJECTDIR}/_ext/208066743/timer.o
+OBJECTFILES=${OBJECTDIR}/_ext/1942262699/timer.o ${OBJECTDIR}/_ext/1942262699/lab1p2.o ${OBJECTDIR}/_ext/1942262699/lcd.o
 
 # Source Files
-SOURCEFILES=../Lab1/Code/labp1.c ../Lab1/Code/leds.c ../Lab1/Code/timer.c
+SOURCEFILES=../Lab1p2/timer.c ../Lab1p2/lab1p2.c ../Lab1p2/lcd.c
 
 
 CFLAGS=
@@ -82,48 +82,48 @@ MP_LINKER_FILE_OPTION=,--script=p24FJ64GA002.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/_ext/208066743/labp1.o: ../Lab1/Code/labp1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/labp1.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/labp1.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/labp1.c  -o ${OBJECTDIR}/_ext/208066743/labp1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/labp1.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/labp1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/timer.o: ../Lab1p2/timer.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/timer.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/timer.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/timer.c  -o ${OBJECTDIR}/_ext/1942262699/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/timer.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/208066743/leds.o: ../Lab1/Code/leds.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/leds.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/leds.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/leds.c  -o ${OBJECTDIR}/_ext/208066743/leds.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/leds.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/leds.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/lab1p2.o: ../Lab1p2/lab1p2.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lab1p2.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lab1p2.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/lab1p2.c  -o ${OBJECTDIR}/_ext/1942262699/lab1p2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/lab1p2.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/lab1p2.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/208066743/timer.o: ../Lab1/Code/timer.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/timer.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/timer.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/timer.c  -o ${OBJECTDIR}/_ext/208066743/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/timer.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/lcd.o: ../Lab1p2/lcd.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lcd.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lcd.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/lcd.c  -o ${OBJECTDIR}/_ext/1942262699/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/lcd.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 else
-${OBJECTDIR}/_ext/208066743/labp1.o: ../Lab1/Code/labp1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/labp1.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/labp1.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/labp1.c  -o ${OBJECTDIR}/_ext/208066743/labp1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/labp1.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/labp1.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/timer.o: ../Lab1p2/timer.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/timer.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/timer.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/timer.c  -o ${OBJECTDIR}/_ext/1942262699/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/timer.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/208066743/leds.o: ../Lab1/Code/leds.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/leds.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/leds.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/leds.c  -o ${OBJECTDIR}/_ext/208066743/leds.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/leds.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/leds.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/lab1p2.o: ../Lab1p2/lab1p2.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lab1p2.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lab1p2.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/lab1p2.c  -o ${OBJECTDIR}/_ext/1942262699/lab1p2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/lab1p2.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/lab1p2.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/208066743/timer.o: ../Lab1/Code/timer.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/208066743" 
-	@${RM} ${OBJECTDIR}/_ext/208066743/timer.o.d 
-	@${RM} ${OBJECTDIR}/_ext/208066743/timer.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1/Code/timer.c  -o ${OBJECTDIR}/_ext/208066743/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/208066743/timer.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/208066743/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/_ext/1942262699/lcd.o: ../Lab1p2/lcd.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1942262699" 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lcd.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1942262699/lcd.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ../Lab1p2/lcd.c  -o ${OBJECTDIR}/_ext/1942262699/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1942262699/lcd.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1942262699/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
