@@ -26,7 +26,7 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 // ******************************************************************************************* //
 
           typedef enum stateTypeENUM{
-    RUN, WAIT, DBP, DBR, CLEAR, INIT
+    RUN, WAIT, CLEAR, INIT
 } stateType;
 
 volatile stateType currstate;
@@ -71,18 +71,7 @@ int main(void) {
                 printStringLCD(getTimeString(TIMERCOUNTER));
                 moveCursorLCD(0,0);
                 break;
-           /* case DBP:
-                Timer1Delay(5);
-                currstate = RUN;
-                break;
-            *
-            case DBR:
-                Timer1Delay(5);
-                currstate = RUN;
-                clearLCD();
-                moveCursorLCD(0,0);
-                break;
-            * */
+           
             case CLEAR:
                 LED_RUN = OFF;
                 LED_STOP = ON;
@@ -101,7 +90,9 @@ int main(void) {
 void _ISR _CNInterrupt(void)
 {
     IFS1bits.CNIF = 0;
-    Timer1Delay(5);
+    delayUs(5000);
+    
+
     if(PORTBbits.RB2 == PRESSED)
     {
        exsw = 1;
@@ -129,6 +120,14 @@ void _ISR _CNInterrupt(void)
         currstate = WAIT;
         exsw = 0;
     }
+    else if(insw == 1 && PORTBbits.RB5 == RELEASED && currstate == RUN)
+    {
+        currstate = RUN;
+        insw =0;
+    }
+
+   
+    
 
 
 

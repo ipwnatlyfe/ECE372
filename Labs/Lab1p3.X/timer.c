@@ -56,16 +56,51 @@ void startTime()
 
 char* getTimeString(unsigned int c)
 {
-    int min=5;
+    int min=0;
     int sec =0;
     int ms =0;
-    char *s;
-    
+    static char s[9];
+
+
+
+
+    char min1 = '0';
+    char min2 = '0';
+    char min3 = '0';
+    char sec1 = '0';
+    char sec2 = '0';
+    char sec3 = '0';
+    char ms1 = '0';
+    char ms2 = '0';
+   
+
     
     min = c / MIN_TO_MS;
     sec = (c - (min * MIN_TO_MS)) / SEC_TO_MS;
-    ms = (c - ((min * MIN_TO_MS) - (sec * SEC_TO_MS))) % SEC_TO_MS;
-    s="HELLO!";
-   // sprintf ( s );
+    ms = (c - (min * MIN_TO_MS) - (sec * SEC_TO_MS));
+
+
+    
+    min2 = (min/10)+'0';
+    min3 = (min%10)+'0';
+
+    
+    sec2 = (sec/10)+'0';
+    sec3 = (sec%10)+'0';
+
+    ms1 = (ms/100) +'0';
+    ms2 = ((ms%100)/10) +'0';
+
+    
+    s[0] = min2;
+    s[1] = min3;
+    s[2] = ':';
+    s[3] = sec2;
+    s[4] = sec3;
+    s[5] = ':';
+    s[6] = ms1;
+    s[7] = ms2;
+    s[8] = '\0';
+
     return s;
 }
