@@ -82,11 +82,11 @@ void initLCD(void) {
     // Initilization sequence utilizes specific LCD commands before the general configuration
     // commands can be utilized. The first few initilition commands cannot be done using the
     // WriteLCD function. Additionally, the specific sequence and timing is very important.
-
+    delayUs(15000);
     // Enable 4-bit interface
     writeFourBits(0x03, LCD_WRITE_CONTROL, 4100, LOWER);
     writeFourBits(0x03, LCD_WRITE_CONTROL, 100, LOWER);
-    writeLCD(0x32, LCD_WRITE_CONTROL, 40);
+    writeLCD(0x32, LCD_WRITE_CONTROL, 100);
     
 
 
@@ -106,14 +106,15 @@ void initLCD(void) {
     writeLCD(0x08, LCD_WRITE_CONTROL, 40);
 
     // TODO: Clear Display (The delay is not specified in the data sheet at this point. You really need to have the clear display delay here.
-    writeLCD(0x01, LCD_WRITE_CONTROL, 40);
+    writeLCD(0x01, LCD_WRITE_CONTROL, 1640);
 
     // TODO: Entry Mode Set
         // Set Increment Display, No Shift (i.e. cursor move)
-     writeLCD(0x01, LCD_WRITE_CONTROL, 40);
+    writeLCD(0x06, LCD_WRITE_CONTROL, 40);
     // TODO: Display On/Off Control
         // Turn Display (D) On, Cursor (C) Off, and Blink(B) Off
-     writeLCD(0x08, LCD_WRITE_CONTROL, 40);
+    writeLCD(0x0C, LCD_WRITE_CONTROL, 40);
+     
 }
 
 /*
@@ -135,30 +136,27 @@ void printStringLCD(const char* s) {
  * Clear the display.
  */
 void clearLCD(){
-    writeLCD(0x01, LCD_WRITE_CONTROL, 40);
+    writeLCD(0x01, LCD_WRITE_CONTROL, 1640);
 }
 
 /*
  Use the command for changing the DD RAM address to put the cursor somewhere.
  */
-void moveCursorLCD(unsigned char x, unsigned char y){
+void moveCursorLCD(unsigned char y, unsigned char x){
     char Address = 0x00;
     char send= 0x01;
     send = send << 7;
-    if (y == '2')
+    if (y == 1)
     {
-        Address = Address + 0x28;
+        Address = Address + 0x40;
     }
 
-    else if (y == '1')
+    else if (y == 0)
     {
-        Address = 0;
+        Address = Address;
     }
 
-    if (x>0x31 && x<0x3B)
-    {
-        Address = Address + (x - 0x30);
-    }
+    Address = Address + (x);
 
     send = (Address | send);
     writeLCD(send, LCD_WRITE_CONTROL, 40);
@@ -177,7 +175,7 @@ void testLCD(){
     clearLCD();
     printStringLCD("Hello!");
     moveCursorLCD(1, 2);
-    for(i = 0; i < 1000; i++) delayUs(1000);
+    for(i = 0; i < 1000; i++) delayUs(1000);    
     printStringLCD("Hello!");
     for(i = 0; i < 1000; i++) delayUs(1000);
 }
