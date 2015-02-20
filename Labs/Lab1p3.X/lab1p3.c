@@ -13,7 +13,7 @@
 #include "leds.h"
 #include "lcd.h"
 #include "timer.h"
-#include "checkButton.h"
+
 
 
 _CONFIG1( JTAGEN_OFF & GCP_OFF & GWRP_OFF & BKBUG_ON & COE_OFF & ICS_PGx1 &
@@ -33,10 +33,14 @@ volatile stateType currstate;
 volatile int counter;
 volatile int insw; //Flag for internal switch RB5
 volatile int exsw; //Flag for internal switch RB2
-volatile unsigned int TIMERCOUNTER; //Counts how many milliseconds
+volatile unsigned int TIMERCOUNTER=0; //Counts how many milliseconds
+
 
 int main(void) {
 
+    initCNForSW1();
+    initLEDs();
+    initSW2();
     currstate = INIT;
     insw = 0;
     exsw = 0;
@@ -48,14 +52,15 @@ int main(void) {
             case INIT:
                 initLCD();
                 currstate = WAIT;
+                break;
 
             case RUN:
                 LED_STOP = OFF;
                 LED_RUN = ON;
-                printStringLCD("RUNNING:");
-                startTime();
+                printStringLCD("RUNNING:");             
                 moveCursorLCD(1,0);
-                //printStringLCD(getTimeString());
+                printStringLCD(getTimeString(TIMERCOUNTER));
+                moveCursorLCD(0,0);
                 break;
 
             case WAIT:
@@ -63,7 +68,8 @@ int main(void) {
                 LED_STOP = ON;
                 printStringLCD("STOPPED:");
                 moveCursorLCD(1,0);
-                //printStringLCD(getTimeString());
+                printStringLCD(getTimeString(TIMERCOUNTER));
+                moveCursorLCD(0,0);
                 break;
            /* case DBP:
                 Timer1Delay(5);
@@ -85,6 +91,7 @@ int main(void) {
                 currstate = WAIT;
                 break;
 
+                
         }
     }
 
@@ -95,7 +102,15 @@ void _ISR _CNInterrupt(void)
 {
     IFS1bits.CNIF = 0;
     Timer1Delay(5);
-    startcheckButton();
+    if(PORTBbits.RB2 == PRESSED)
+    {
+       exsw = 1;
+    }
+
+    else if(PORTBbits.RB5 == PRESSED)
+    {
+        insw = 1;
+    }
     
 
     if(insw == 1 && PORTBbits.RB5 == RELEASED && currstate == WAIT)
@@ -106,6 +121,7 @@ void _ISR _CNInterrupt(void)
     else if(exsw == 1 && PORTBbits.RB2 == RELEASED && currstate == WAIT)
     {
         currstate = RUN;
+        startTime();
         exsw = 0;
     }
     else if(exsw == 1 && PORTBbits.RB2 == RELEASED && currstate == RUN)
@@ -118,7 +134,19 @@ void _ISR _CNInterrupt(void)
 
 }
 
-void _ISR _T1Interrupt(void)
+void __attribute__((__interrupt__, __shadow__)) _T1Interrupt(void)
 {
-    TIMERCOUNTER++;
+    IFS0bits.T1IF = 0;
+    
+    if(currstate == RUN)
+    {
+       TIMERCOUNTER++;
+       TMR1 = 0;
+    }
+    else
+    {
+        T1CONbits.TON = 0;
+    }
+
+
 }
