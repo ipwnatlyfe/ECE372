@@ -7,7 +7,7 @@
  * resistors. Don't forget about other considerations...
  */
 void initKeypad(void){
-        
+
     TRISAbits.TRISA0 = OUTPUT; // pin 9 ROW1
     TRISAbits.TRISA1 = OUTPUT; // pin 10 ROW2
     TRISBbits.TRISB2 = OUTPUT; // pin 14 ROW3
@@ -33,17 +33,17 @@ void initKeypad(void){
 
     CNPU2bits.CN22PUE = 1;
     CNEN2bits.CN22IE = 1;
-    
+
     CNPU1bits.CN15PUE = 1;
     CNEN1bits.CN15IE = 1;
-    
+
     CNPU2bits.CN16PUE = 1;
     CNEN2bits.CN16IE = 1;
-    
 
 
 
-    
+
+
 }
 
 /* This function will be called AFTER you have determined that someone pressed
@@ -53,7 +53,7 @@ void initKeypad(void){
  * the key that is pressed.
  */
 char scanKeypad(void){
-    
+
 
     char key = -1;
 
@@ -112,7 +112,7 @@ char scanKeypad(void){
     {
         key = '9';
     }
-    
+
     ROW1 = OFF; // pin 9
     ROW2 = OFF; // pin 10
     ROW3 = OFF; // pin 14

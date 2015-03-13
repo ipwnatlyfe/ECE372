@@ -45,7 +45,7 @@ void Timer1Delay(unsigned int delay)
 void startTime() //HAVE TO USE A loop of 2 BECAUSE IM LAZY
 {
     TMR1 = 0;
-    PR1 = 1000&ONE_MILLISECOND;
+    PR1 = 1000*ONE_MILLISECOND;
     T1CONbits.TCKPS = 0b11;
     IFS0bits.T1IF = 0;
     IEC0bits.T1IE = 1;

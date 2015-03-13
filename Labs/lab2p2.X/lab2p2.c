@@ -11,6 +11,7 @@
 #include "timer.h"
 #include "keypad.h"
 #include <stdio.h>
+#include <string.h>
 
 _CONFIG1( JTAGEN_OFF & GCP_OFF & GWRP_OFF & BKBUG_ON & COE_OFF & ICS_PGx1 &
           FWDTEN_OFF & WINDIS_OFF & FWPSA_PR128 & WDTPS_PS32768 )
@@ -21,7 +22,7 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 
 
 typedef enum stateTypeENUM{
-    ENTER, GOOD, VALID, BAD, SETMODE, INVALID, WAIT, DEBOUNCE, WRITE, WAITRELEASE, CHECK
+    ENTER, GOOD, VALID, BAD, SETMODE, INVALID, WAIT, DEBOUNCE, WRITE, WAITRELEASE, CHECK, SETCHECK
 } stateType;
 
 int CursorCounterX;
@@ -29,10 +30,11 @@ int CursorCounterY;
 volatile int inputcounter;
 char checkChar;
 char input [4];
-char pw1 [4] = "    ";
-char pw2 [4] = "    ";
-char pw3 [4] = "    ";
-char pw4 [4] = "    ";
+char pw1[4][4];
+//char pw1[4][4] = "1234";
+//char pw2 [4] = "    ";
+//char pw3 [4] = "    ";
+//char pw4 [4] = "    ";
 
 int i = 0;
 int starcounter = 0;
@@ -40,8 +42,10 @@ int starcounter = 0;
 volatile stateType currstate;
 volatile stateType nextState;
 volatile stateType prevState;
-volatile int timerstarted = 0;
-volatile int secondscounter = 0;
+volatile int timerstarted;
+volatile int secondscounter;
+volatile int passcounter;
+volatile int setflag;
 
 
 int main(void)
@@ -52,7 +56,18 @@ int main(void)
     CursorCounterX = 0;
     CursorCounterY = 0;
     inputcounter = 0;
+    timerstarted = 0;
+    secondscounter = 0;
+    passcounter = 1;
+    setflag =0;
 
+    strcpy(pw1[0],"1234");
+    strcpy(pw1[1],"    ");
+    strcpy(pw1[2],"    ");
+    strcpy(pw1[3],"    ");
+
+
+   
     currstate = ENTER;
 
 
@@ -61,35 +76,52 @@ int main(void)
         switch (currstate)
         {
             case ENTER:
+                clearLCD();
+                delayUs(1640);
                 CursorCounterY = 0;
                 CursorCounterX = 0;
                 timerstarted = 0;
                 inputcounter = 0;
+                secondscounter = 0;
                 moveCursorLCD(CursorCounterY, CursorCounterX);
+                delayUs(40);
                 printStringLCD("ENTER:");
                 CursorCounterY = 1;
                 CursorCounterX = 0;
                 moveCursorLCD(CursorCounterY, CursorCounterX);
+                delayUs(40);
                 currstate = WAIT;
+                prevState=ENTER;
                 break;
             case WAIT:
-                prevState=ENTER;
+                
                 currstate = WAIT;
-                if(prevState == WAITRELEASE)
-                {
-                    if (inputcounter == 3) // MAX ENTRY SO WE NOW NEED TO CHECK IF VALID
+                
+                if (inputcounter == 4 && setflag == 0) // MAX ENTRY SO WE NOW NEED TO CHECK IF VALID
                     {
                         prevState = WAIT;
                         currstate = CHECK;
                     }
+                else if (inputcounter == 2 && (input[1] == '*') && (input[1] == '*'))
+                {
+                    currstate = SETMODE;
+                    clearLCD();
+                    delayUs(1640);
                 }
+                else if (inputcounter == 4 && setflag == 1) // MAX ENTRY SO WE NOW NEED TO CHECK IF VALID
+                    {
+                        prevState = WAIT;
+                        currstate = SETCHECK;
+                    }
                 break;
             case DEBOUNCE:
                 delayUs(800);
                 nextState = WRITE;
                 if(prevState == WAITRELEASE)
                 {
+
                     currstate = WAIT;
+
                 }
                 else
                 {
@@ -125,18 +157,14 @@ int main(void)
                 nextState = ENTER;
                 CursorCounterY = 0;
                 CursorCounterX = 0;
-                moveCursorLCD(CursorCounterY, CursorCounterX);
+                moveCursorLCD(CursorCounterY, CursorCounterX);                
                 printStringLCD("GOOD");
-                CursorCounterY = 1;
-                CursorCounterX = 0;
-                moveCursorLCD(CursorCounterY, CursorCounterX);
-                printStringLCD("    ");
                 if (timerstarted == 0)
                 {
                     startTime();
                     timerstarted = 1;
                 }
-
+                break;
             case BAD:
                 prevState = CHECK;
                 currstate = BAD;
@@ -144,33 +172,29 @@ int main(void)
                 CursorCounterY = 0;
                 CursorCounterX = 0;
                 moveCursorLCD(CursorCounterY, CursorCounterX);
-                printStringLCD("BAD");
-                CursorCounterY = 1;
-                CursorCounterX = 0;
-                moveCursorLCD(CursorCounterY, CursorCounterX);
-                printStringLCD("    ");
+                printStringLCD("BAD");             
                 if (timerstarted == 0)
                 {
                     startTime();
                     timerstarted = 1;
                 }
-
+                break;
             case CHECK:
                 i = 0;
                 starcounter = 0;
                 nextState = GOOD;
                 for(i=0;i<inputcounter;i++)
                 {
-                   if(input[i] = '#')
+                   if(input[i] == '#')
                    {
                        nextState = BAD;
                    }
-                   else if((((i == 0)||(i==1)) && input[i]) == '*')
+                   else if(((i == 0)||(i==1)) && (input[i] == '*'))
                    {
                        starcounter++;
                    }
                    
-                   else if((input[i] != pw1[i]) || (input[i] != pw1[i]) || (input[i] != pw1[i]) || (input[i] != pw1[i]))
+                   else if((input[i] != pw1[0][i]) && (input[i] != pw1[1][i]) && (input[i] != pw1[2][i]) && (input[i] != pw1[3][i]))
                    {
                        nextState = BAD;
                    }
@@ -182,7 +206,83 @@ int main(void)
                 }
                 currstate = nextState;
                 prevState = CHECK;
+                clearLCD();
+                delayUs(1640);
+                break;
+            case SETMODE:
+                CursorCounterY = 0;
+                CursorCounterX = 0;
+                timerstarted = 0;
+                inputcounter = 0;
+                secondscounter = 0;
+                moveCursorLCD(CursorCounterY, CursorCounterX);
+                delayUs(40);
+                printStringLCD("SET MODE");
+                CursorCounterY = 1;
+                CursorCounterX = 0;
+                moveCursorLCD(CursorCounterY, CursorCounterX);
+                delayUs(40);
+                currstate = WAIT;
+                prevState=SETMODE;
+                setflag =1;
+                break;
+            case VALID:
+                prevState = SETCHECK;
+                currstate = VALID;
+                nextState = ENTER;
+                CursorCounterY = 0;
+                CursorCounterX = 0;
+                moveCursorLCD(CursorCounterY, CursorCounterX);
+                printStringLCD("VALID");
+                if (timerstarted == 0)
+                {
+                    startTime();
+                    timerstarted = 1;
+                }
+                break;
+            case INVALID:
+                prevState = SETCHECK;
+                currstate = INVALID;
+                nextState = ENTER;
+                CursorCounterY = 0;
+                CursorCounterX = 0;
+                moveCursorLCD(CursorCounterY, CursorCounterX);
+                printStringLCD("INVALID");
+                if (timerstarted == 0)
+                {
+                    startTime();
+                    timerstarted = 1;
+                }
+                break;
+            case SETCHECK:
+                i = 0;
+                nextState = VALID;
+                for(i=0;i<4;i++)
+                {
+                   if(input[i] == '#' || input[i] == '*')
+                   {
+                       nextState = INVALID;
+                   }
 
+                }
+                if(nextState != INVALID)
+                {
+                    for(i=0;i<4;i++)
+                    {
+                       pw1[passcounter][i] = input[i];
+
+                    }
+                    
+                    //strcpy(pw1[passcounter], input);
+                    passcounter++;
+                }
+                
+                currstate = nextState;
+                prevState = SETCHECK;
+                clearLCD();
+                delayUs(1640);
+                setflag = 0;
+                break;
         }
     }
 
@@ -192,7 +292,7 @@ int main(void)
 void _ISR _CNInterrupt(void){
     IFS1bits.CNIF = 0;
 
-    if(currstate = WAIT)
+    if(currstate == WAIT)
     {
         prevState = WAIT;
         currstate = DEBOUNCE;
@@ -214,9 +314,9 @@ void __attribute__((__interrupt__, __shadow__)) _T1Interrupt(void)
     IFS0bits.T1IF = 0;
 
     if (secondscounter == 2)
-    {
-        secondscounter = 0;
+    {      
         currstate = nextState;
+        T1CONbits.TON = 0;
     }
     else
     {
