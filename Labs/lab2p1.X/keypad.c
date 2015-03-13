@@ -2,36 +2,48 @@
 #include "keypad.h"
 #include "timer.h"
 
+
 /* Initialize the rows as ODC outputs and the columns as inputs with pull-up
  * resistors. Don't forget about other considerations...
  */
 void initKeypad(void){
-    TRISBbits.TRISB2 = 0; // pin 25
-    TRISBbits.TRISB3 = 0; // pin 24
-    TRISAbits.TRISA0 = 0; // pin 23
-    TRISAbits.TRISA1 = 0; // pin 26
+        
+    TRISAbits.TRISA0 = OUTPUT; // pin 9 ROW1
+    TRISAbits.TRISA1 = OUTPUT; // pin 10 ROW2
+    TRISBbits.TRISB2 = OUTPUT; // pin 14 ROW3
+    TRISBbits.TRISB9 = OUTPUT; // pin 17 ROW4
 
-    TRISBbits.TRISB7 = 1; // pin 18
-    TRISBbits.TRISB10 = 1; // pin 21
-    TRISBbits.TRISB11 = 1; // pin 22
+    TRISBbits.TRISB8 = INPUT; // pin 18 COL1
+    TRISBbits.TRISB10 = INPUT; // pin 21 COL2
+    TRISBbits.TRISB11 = INPUT; // pin 22 COL3
 
-    ODCAbits.ODA0 = 1; // pin 23
-    ODCAbits.ODA1 = 1; // pin 26
-    ODCBbits.ODB2 = 1; // pin 25
-    ODCBbits.ODB3 = 1; // pin 24
+    ODCAbits.ODA0 = 1; // pin 9
+    ODCAbits.ODA1 = 1; // pin 10
+    ODCBbits.ODB2 = 1; // pin 14
+    ODCBbits.ODB9 = 1; // pin 16
+
+    AD1PCFGbits.PCFG0 = 1;
+    AD1PCFGbits.PCFG1 = 1;
+    AD1PCFGbits.PCFG4 = 1;
+
+    IEC1bits.CNIE = 1;
 
     IFS1bits.CNIF = 0;
 
-    CNEN2bits.CN21IE = 1;
-    CNPU2bits.CN21PUE = 1;
 
-    CNEN1bits.CN15IE = 1;
+    CNPU2bits.CN22PUE = 1;
+    CNEN2bits.CN22IE = 1;
+    
     CNPU1bits.CN15PUE = 1;
-
-    CNEN2bits.CN16IE = 1;
+    CNEN1bits.CN15IE = 1;
+    
     CNPU2bits.CN16PUE = 1;
+    CNEN2bits.CN16IE = 1;
+    
 
-    IEC1bits.CNIE = 1;
+
+
+    
 }
 
 /* This function will be called AFTER you have determined that someone pressed
@@ -41,79 +53,90 @@ void initKeypad(void){
  * the key that is pressed.
  */
 char scanKeypad(void){
+    
+
     char key = -1;
 
-    ODCAbits.ODA0 = 1; // pin 23
-    ODCAbits.ODA1 = 0; // pin 26
-    ODCBbits.ODB2 = 0; // pin 25
-    ODCBbits.ODB3 = 0; // pin 24
+    IEC1bits.CNIE = 0;
 
-    if(LATBbits.LATB7 == 0)
+    ROW1 = ON; // pin 9
+    ROW2 = OFF; // pin 10
+    ROW3 = OFF; // pin 14
+    ROW4 = OFF; // pin 16
+    delayUs(50);
+    if(COL1 == ON)
     {
-        return 0x31;
+        key = '1';
     }
-    else if(LATBbits.LATB10 == 0)
+    else if(COL2 == ON)
     {
-        return 0x32;
+        key = '2';
     }
-    else if(LATBbits.LATB11 == 0)
+    else if(COL3 == ON)
     {
-        return 0x33;
-    }
-
-    ODCAbits.ODA0 = 0; // pin 23
-    ODCAbits.ODA1 = 1; // pin 26
-    ODCBbits.ODB2 = 0; // pin 25
-    ODCBbits.ODB3 = 0; // pin 24
-
-    if(LATBbits.LATB7 == 0)
-    {
-        return 0x34;
-    }
-    else if(LATBbits.LATB10 == 0)
-    {
-        return 0x35;
-    }
-    else if(LATBbits.LATB11 == 0)
-    {
-        return 0x36;
+        key = '3';
     }
 
-    ODCAbits.ODA0 = 0; // pin 23
-    ODCAbits.ODA1 = 0; // pin 26
-    ODCBbits.ODB2 = 1; // pin 25
-    ODCBbits.ODB3 = 0; // pin 24
-
-    if(LATBbits.LATB7 == 0)
+    ROW1 = OFF; // pin 9
+    ROW2 = ON; // pin 10
+    ROW3 = OFF; // pin 14
+    ROW4 = OFF; // pin 16
+    delayUs(50);
+   if(COL1 == ON)
     {
-        return 0x37;
+        key = '4';
     }
-    else if(LATBbits.LATB10 == 0)
+    else if(COL2 == ON)
     {
-        return 0x38;
+        key = '5';
     }
-    else if(LATBbits.LATB11 == 0)
+    else if(COL3 == ON)
     {
-        return 0x39;
-    }
-
-    ODCAbits.ODA0 = 0; // pin 23
-    ODCAbits.ODA1 = 0; // pin 26
-    ODCBbits.ODB2 = 0; // pin 25
-    ODCBbits.ODB3 = 1; // pin 24
-
-    if(LATBbits.LATB7 == 0)
-    {
-        return 0x3A;
-    }
-    else if(LATBbits.LATB10 == 0)
-    {
-        return 0x3B;
-    }
-    else if(LATBbits.LATB11 == 0)
-    {
-        return 0x3C;
+        key = '6';
     }
 
+    ROW1 = OFF; // pin 9
+    ROW2 = OFF; // pin 10
+    ROW3 = ON; // pin 14
+    ROW4 = OFF; // pin 16
+    delayUs(50);
+     if(COL1 == ON)
+    {
+        key = '7';
+    }
+    else if(COL2 == ON)
+    {
+        key = '8';
+    }
+    else if(COL3 == ON)
+    {
+        key = '9';
+    }
+    
+    ROW1 = OFF; // pin 9
+    ROW2 = OFF; // pin 10
+    ROW3 = OFF; // pin 14
+    ROW4 = ON; // pin 16
+    delayUs(50);
+    if(COL1 == ON)
+    {
+        key = '*';
+    }
+    else if(COL2 == ON)
+    {
+        key = '0';
+    }
+    else if(COL3 == ON)
+    {
+        key = '#';
+    }
+
+    ROW1 = ON; // pin 9
+    ROW2 = ON; // pin 10
+    ROW3 = ON; // pin 14
+    ROW4 = ON; // pin 16
+
+    IEC1bits.CNIE = 1;
+    IFS1bits.CNIF = 0;
     return key;
 }
