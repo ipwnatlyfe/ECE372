@@ -1,7 +1,7 @@
 // ******************************************************************************************* //
-// File:         lab2p1.c
+// File:         lab2p2.c
 // Date:
-// Authors:
+// Authors:     Steven Wirth
 //
 // Description:
 // ******************************************************************************************* //
@@ -25,31 +25,33 @@ typedef enum stateTypeENUM{
     ENTER, GOOD, VALID, BAD, SETMODE, INVALID, WAIT, DEBOUNCE, WRITE, WAITRELEASE, CHECK, SETCHECK
 } stateType;
 
-int CursorCounterX;
-int CursorCounterY;
-volatile int inputcounter;
-char checkChar;
-char input [4];
-char pw1[4][4];
-//char pw1[4][4] = "1234";
-//char pw2 [4] = "    ";
-//char pw3 [4] = "    ";
-//char pw4 [4] = "    ";
+int CursorCounterX;             //Keeps Track of Cursor Postion X-Coordinate
+int CursorCounterY;             //Keeps Track of Cursor Postion Y-Coordinate
+volatile int inputcounter;      //Keeps Track of number of input characters
+char checkChar;                 //Holds the character that is being scanned in
+char input [4];                 //Array of the currently inputted words
+char pw1[4][4];                 //4x4 array that holds 4 passwords of length 4 each
 
-int i = 0;
-int starcounter = 0;
+int i = 0;                      // Used for looping through arrays
+int starcounter = 0;            //keeps track of how many stars there are (initally to check that the first two characters being stars puts it into set mode
 
-volatile stateType currstate;
-volatile stateType nextState;
-volatile stateType prevState;
-volatile int timerstarted;
-volatile int secondscounter;
-volatile int passcounter;
-volatile int setflag;
+volatile stateType currstate;   //Holds the current state that the circuit is in
+volatile stateType nextState;   //Holds the next state to go to in the logic machine
+volatile stateType prevState;   //Holds the previous state to go to in the logic machine
+volatile int timerstarted;      //Flag for if the timer was started or not
+volatile int secondscounter;    //Holds the counter for the amount of seconds passed
+volatile int passcounter;       //The Counter for which password we're currently replacing
+volatile int setflag;           //Flag for whether the data is set or not
 
 
 int main(void)
 {
+//    /*
+//     I initialize all the counters and variables and I set the starting state
+//     as the "Enter" state. I also added a default password of "1234" to the
+//     * stored passwords.
+//
+//    */
     initLCD();
     initKeypad();
     
@@ -64,7 +66,7 @@ int main(void)
     strcpy(pw1[0],"1234");
     strcpy(pw1[1],"    ");
     strcpy(pw1[2],"    ");
-    strcpy(pw1[3],"    ");
+    strcpy(pw1[3],"    ");      
 
 
    
@@ -75,6 +77,10 @@ int main(void)
 
         switch (currstate)
         {
+            //Since the enter case is the state that all sequences lead back to, we use this to
+            //Reinitialize all the counters and variables needed throughout the sequence.
+            //As well clearing the LCD and displays enter. Switches to the WAIT state to
+            //Wait for key presses
             case ENTER:
                 clearLCD();
                 delayUs(1640);
@@ -93,6 +99,8 @@ int main(void)
                 currstate = WAIT;
                 prevState=ENTER;
                 break;
+
+            //Waits for a button to be pressed then goes to the appropriate state.
             case WAIT:
                 
                 currstate = WAIT;
