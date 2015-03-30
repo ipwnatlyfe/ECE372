@@ -19,7 +19,7 @@ int main(void)
 {
 initADC();
 initLCD();
-//initPWM();
+initPWM();
 
 while(1)
 {
