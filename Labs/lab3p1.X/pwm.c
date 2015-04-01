@@ -15,7 +15,6 @@ OC1CONbits.OCM = 6;
 RPOR1bits.RP2R = 18; // map OC1 to pin 6
 OC1R = 0; //very important
 OC1RS = 14;
-//T3CONbits.TON = 1;
 
 T3CONbits.TCKPS = 3;
 TMR3 = 0;
@@ -44,7 +43,6 @@ OC1CONbits.OCM = 6;
 RPOR1bits.RP3R = 18; // map OC1 to pin 7
 OC1R = 0; //very important
 OC1RS = 14;
-//T3CONbits.TON = 1;
 
 T3CONbits.TCKPS = 3;
 TMR3 = 0;
