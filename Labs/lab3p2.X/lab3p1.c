@@ -19,16 +19,17 @@ int main(void)
 {
 initADC();
 initLCD();
-initPWM();
-//initBackPWM();
+//initPWM();
+initBackPWM();
+
 while(1)
 {
     if (done == 1)
     {
         clearLCD();
         delayUs(1640);
-        sprintf(str, "%d", adcVal);       
-        printStringLCD(str);
+        //sprintf(str, "%d", adcVal);        
+        printStringLCD("hello");
         done = 0;
     }
 
@@ -39,7 +40,6 @@ return 0;
 void _ISR _ADC1Interrupt(void){
 IFS0bits.AD1IF = 0;
 
-/*
 int i = 0;
 unsigned int *adcPtr;
 adcVal = 0;
@@ -48,8 +48,6 @@ for(i = 0; i < 16; i++){
 adcVal = adcVal + *adcPtr/16;
 adcPtr++;
 }
- * */
-adcVal = ADC1BUF0;
 done = 1;
 
 //printStringLCD(getVoltString(adcVal));
