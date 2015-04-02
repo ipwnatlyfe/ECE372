@@ -13,6 +13,7 @@ IOL1WAY_OFF & I2C1SEL_PRI & POSCMOD_XT )
 volatile int val = 0;
 volatile int done = 0;
 volatile int adcVal = 0;
+volatile float printVar = 0;
 static char str[15];
 
 int main(void)
@@ -21,15 +22,14 @@ initADC();
 initLCD();
 //initPWM();
 initBackPWM();
-
 while(1)
 {
     if (done == 1)
     {
-        clearLCD();
-        delayUs(1640);
-        //sprintf(str, "%d", adcVal);        
-        printStringLCD("hello");
+        moveCursorLCD(0,0);
+        printVar = (adcVal/(1023.0) * 3.3);
+        sprintf(str, "%.3f", printVar);
+        printStringLCD(str);
         done = 0;
     }
 
@@ -40,6 +40,7 @@ return 0;
 void _ISR _ADC1Interrupt(void){
 IFS0bits.AD1IF = 0;
 
+
 int i = 0;
 unsigned int *adcPtr;
 adcVal = 0;
@@ -48,7 +49,7 @@ for(i = 0; i < 16; i++){
 adcVal = adcVal + *adcPtr/16;
 adcPtr++;
 }
+
 done = 1;
 
-//printStringLCD(getVoltString(adcVal));
 }
