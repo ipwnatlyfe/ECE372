@@ -7,6 +7,12 @@ TRISBbits.TRISB9 = 0; // Pin 18 Output
 LATBbits.LATB3 = 0; // Set pin 7 to low to create a voltage difference
 LATBbits.LATB9 = 0; // Set pin 18 to low to create a voltage difference
 */
+RPOR1bits.RP3R = 0; // map OC1 to pin 7
+RPOR4bits.RP9R = 0; // map OC2 to pin 18
+
+LATBbits.LATB3 = 0; // Set pin 7 to low to create a voltage difference
+LATBbits.LATB9 = 0; // Set pin 18 to low to create a voltage difference
+
 OC1CONbits.OCM = 0;
 OC2CONbits.OCM = 0;
 T3CONbits.TCKPS = 3;
@@ -36,6 +42,12 @@ TRISBbits.TRISB8 = 0; // Pin 17 to output to go backwards
 LATBbits.LATB2 = 0; // Pin 6 to low to go backwards
 LATBbits.LATB8 = 0; // Pin 17 to output to go backwards
 */
+RPOR1bits.RP2R = 0; // map OC1 to pin 6
+RPOR4bits.RP8R = 0; // map OC2 to pin 17
+
+LATBbits.LATB2 = 0; // Pin 6 to low to go backwards
+LATBbits.LATB8 = 0; // Pin 17 to output to go backwards
+
 OC1CONbits.OCM = 0;
 OC2CONbits.OCM = 0;
 T3CONbits.TCKPS = 3;
