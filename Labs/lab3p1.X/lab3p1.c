@@ -22,6 +22,7 @@ initADC();
 initLCD();
 //initPWM();
 initBackPWM();
+//initTrial();
 while(1)
 {
     if (done == 1)

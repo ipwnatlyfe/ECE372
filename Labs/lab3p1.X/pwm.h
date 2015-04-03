@@ -9,6 +9,7 @@
 #define	PWM_H
 void initPWM();
 void initBackPWM();
+void initTrial();
 #endif	/* PWM_H */
 
 
