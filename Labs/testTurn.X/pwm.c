@@ -29,39 +29,8 @@
 //this function initializes the pulse width modulation for forward movement
 void initPWM(){
 
-RPOR_RP3R = RESET; // map OC1 to pin 7
-RPOR_RP9R = RESET; // map OC2 to pin 18
-
-LAT_B3 = RESET; // Set pin 7 to low to create a voltage difference
-LAT_B9 = RESET; // Set pin 18 to low to create a voltage difference
-
-OC1CONbits.OCM = RESET;
-OC2CONbits.OCM = RESET;
-T3CONbits.TCKPS = T3_PR;
-TMR3 = RESET;
-PR3 = PR3_VAL;
-OC1CONbits.OCTSEL = ON; // using timer 3
-OC1CONbits.OCM = OCxCON_VAL;
-RPOR_RP10R = OC1; // map OC1 to pin 21
-OC1R = RESET; //very important
-OC1RS = OCxRS_VAL;
-
-TMR3 = RESET;
-PR3 = PR3_VAL;
-OC2CONbits.OCTSEL = ON; // using timer 3
-OC2CONbits.OCM = OCxCON_VAL;
-RPOR_RP8R = OC2; // map OC2 to pin 17
-OC2R = RESET; //very important
-OC2RS = OCxRS_VAL;
-T3CONbits.TON = ON;
-
-}
-
-void initPWMSpin(){
-
-RPOR_RP3R = RESET;
-RPOR_RP8R = RESET;
-
+RPOR_RP3R = RESET; 
+RPOR_RP9R = RESET;  
 
 LAT_B3 = RESET; // Set pin 7 to low to create a voltage difference
 LAT_B8 = RESET;

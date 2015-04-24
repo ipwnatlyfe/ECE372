@@ -20,7 +20,7 @@ TMR3 = 0;
 PR3 = 56;
 OC1CONbits.OCTSEL = 1; // using timer 3
 OC1CONbits.OCM = 6;
-RPOR1bits.RP2R = 18; // map OC1 to pin 6
+RPOR1bits.RP3R = 18; // map OC1 to pin 6
 OC1R = 0; //very important
 OC1RS = 55;
 

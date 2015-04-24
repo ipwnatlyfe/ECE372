@@ -8,7 +8,7 @@
 #ifndef PWM_H
 #define	PWM_H
 void initPWM();
-void initPWMSpin();
+void initBackPWM();
 void initTrial();
 #endif	/* PWM_H */
 
