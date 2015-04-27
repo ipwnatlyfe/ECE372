@@ -13,11 +13,12 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 IOL1WAY_OFF & I2C1SEL_PRI & POSCMOD_XT )
 
 typedef enum stateTypeENUM{
-    IDLE, FORWARD, CHECKSENSORS, TLEFT, TRIGHT, STOP, ADJUSTL, ADJUSTR, YOUSPINMERIGHTROUND
+    IDLE, FORWARD, CHECKSENSORS, TLEFT, TRIGHT, STOP, ADJUSTL, ADJUSTR, YOUSPINMERIGHTROUND, KEEPLEFT, KEEPRIGHT
 } stateType;
 
 volatile stateType currstate;
 volatile stateType prevstate;
+volatile stateType nextstate;
 
 volatile int val = 0;
 volatile int done = 0;
@@ -34,8 +35,13 @@ volatile int dutyLeft;
 volatile int dutyRight;
 volatile int newRight;
 volatile int newLeft;
+volatile float start = 0.0;
 volatile int TIMERCOUNTER = 0;
 volatile int STOPCOUNTER = 0;
+volatile int RIGHTTURNS = 0;
+volatile int LEFTTURNS = 0;
+volatile int BLACKTOWHITE = 0;
+volatile int WHITETOBLACK = 0;
 
 
 int main(void)
@@ -56,6 +62,7 @@ LATBbits.LATB9 = 0;         // Set pin 18 to low to create a voltage difference
 
 currstate = IDLE;
 prevstate = IDLE;
+nextstate = TLEFT;
 isMoving = 0;
 isPressed = 0;
 newRight = 0;
@@ -66,7 +73,7 @@ while(1)
     if (done == 1)
     {
         moveCursorLCD(0,0);
-        printVar = (adcValMiddle);
+        printVar = (adcValLeft);
         sprintf(str, "%.3f", printVar);
         printStringLCD(str);
         done = 0;
@@ -86,35 +93,54 @@ while(1)
                moveCursorLCD(1,0);
                printStringLCD("CHECKING");
 
-               if(((adcValMiddle > 700) && (adcValLeft < 200) && (adcValRight < 200))|| ((adcValMiddle < 200) && (adcValLeft <200)  && (adcValRight < 200)))// Conditions for going straight
+               if(((adcValMiddle > 800) && (adcValLeft < 500) && (adcValRight < 500))|| ((adcValMiddle < 500) && (adcValLeft <500)  && (adcValRight < 500)))// Conditions for going straight
                {
                     currstate  = FORWARD;
                }
                
-               else if((adcValMiddle < 200) && (adcValLeft > 700) && (adcValRight < 200))// Conditions for going left
+               else if((adcValMiddle < 500) && (adcValLeft > 800) && (adcValRight < 500))// Conditions for going left
                {
                     currstate  = ADJUSTL;
                }
-               else if((adcValMiddle < 200) && (adcValLeft > 700) && (adcValRight >700))
+               else if((adcValMiddle < 500) && (adcValLeft < 500) && (adcValRight < 500))// Conditions for going left
                {
                     currstate  = FORWARD;
                }
-               else if((adcValMiddle < 200) && (adcValLeft < 200)  && (adcValRight > 700))// Conditions for going right
+               else if((adcValMiddle < 500) && (adcValLeft > 800) && (adcValRight >800))
+               {
+                    currstate  = FORWARD;
+               }
+               else if((adcValMiddle < 500) && (adcValLeft < 500)  && (adcValRight > 800))// Conditions for going right
                {
                     currstate  = ADJUSTR;
                }
-               else if((adcValMiddle > 700) && (adcValLeft > 700)  && (adcValRight < 200))
-               {
-                   currstate = TLEFT;
-               }
-               else if((adcValMiddle > 700) && (adcValLeft > 700)  && (adcValRight < 200))
-               {
-                   currstate = TRIGHT;
-               }
-               else if(((adcValMiddle > 700) && (adcValLeft > 700)  && (adcValRight > 700)))
+               
+               else if(((adcValMiddle > 800) && (adcValLeft > 800)  && (adcValRight > 800)))
                {
                    currstate = STOP;
                }
+
+               else if((adcValMiddle >800) && (adcValLeft > 800)  && (adcValRight < 500) )
+               {
+                  // currstate = TRIGHT;
+                  
+
+               }
+               else if((adcValMiddle > 800) && (adcValLeft <500 )  && (adcValRight > 800))
+               {
+                       
+                      currstate = KEEPLEFT;
+                   
+                   
+               }
+               else if((adcValMiddle< 500) && (adcValLeft > 800 )  && (adcValRight > 800))
+               {
+                   
+                      
+                      // currstate = KEEPLEFT;
+                                  
+               }
+               
 
 
                prevstate = CHECKSENSORS;
@@ -126,7 +152,7 @@ while(1)
                 isMoving = 1;
                 }
                OC1RS = 40;
-               OC2RS = 35;
+               OC2RS = 40;
                currstate = CHECKSENSORS;
                prevstate = FORWARD;
                break;
@@ -156,17 +182,95 @@ while(1)
                break;
 
            case TLEFT:             
-               OC1RS = 50;
-               OC2RS = 0;              
+                if (isMoving == 0)
+                {
+                initPWM();
+                isMoving = 1;
+                }
+               OC1RS = 55;
+               OC2RS = 0;
+               
+
+               if(LEFTTURNS < 2e)
+               {
+                   prevstate = KEEPLEFT;
+                   currstate = KEEPLEFT;
+               }
+               else
+               {
+               currstate = CHECKSENSORS;
+               LEFTTURNS = 0;
+               isMoving = 0;
+               start = 0;
+               }
+               break;
+/*
+               if (WHITETOBLACK < 1)
+               {
+                   if(adcValMiddle < 500)
+                   {
+                   BLACKTOWHITE++;                   
+                   }
+
+                   else if(BLACKTOWHITE > 0 && adcValMiddle > 700)
+                   {
+                       WHITETOBLACK++;
+                   }
+
+               }
+               else
+               {
+                   LEFTTURNS++;
+                   WHITETOBLACK = 0;
+                   BLACKTOWHITE++;
+               }
+ * */
                currstate = CHECKSENSORS;
                prevstate = TLEFT;
+
+              
+               
+               
                break;
 
            case TRIGHT:
+               if (isMoving == 0)
+                {
+                initPWM();
+                isMoving = 1;
+                }
+               //OC1RS = 55;
+               //OC2RS = 40;
                OC1RS = 0;
                OC2RS = 35;
                currstate = CHECKSENSORS;
                prevstate = TRIGHT;
+               break;
+               /*
+              if (WHITETOBLACK < 1)
+               {
+                   if(adcValMiddle < 500)
+                   {
+                   BLACKTOWHITE++;
+                   }
+
+                   else if(BLACKTOWHITE > 0 && adcValMiddle > 700)
+                   {
+                       WHITETOBLACK++;
+                   }
+
+               }
+               else
+               {
+                   RIGHTTURNS++;
+                   WHITETOBLACK = 0;
+                   BLACKTOWHITE++;
+               }
+                * */
+               currstate = CHECKSENSORS;
+               prevstate = TRIGHT;
+              
+               
                break;
 
            case STOP:
@@ -177,6 +281,47 @@ while(1)
                prevstate = STOP;
                startTime();            
                break;
+
+
+           case KEEPLEFT:
+                isMoving = 0;
+               OC1RS = 0;
+               OC2RS = 0;
+               currstate = TLEFT;
+               prevstate = KEEPLEFT;
+               startTime();
+               break;
+
+              
+
+           case KEEPRIGHT:
+               if (isMoving == 0)
+                {
+                initPWM();
+                isMoving = 1;
+                }
+               OC1RS = 0;
+               OC2RS = 55;
+               if(start == 0.0)
+               {
+                   startTime2();
+                   start++;
+               }
+
+               if(RIGHTTURNS < 10)
+               {
+                   prevstate = KEEPRIGHT;
+                   currstate = KEEPRIGHT;
+               }
+               else
+               {
+               currstate = CHECKSENSORS;
+               //RIGHTTURNS = 0;
+               isMoving = 0;
+               //start = 0;
+               }
+               break;
+
 
            case YOUSPINMERIGHTROUND:
                initPWMSpin();
@@ -190,9 +335,11 @@ while(1)
                }
                else
                {
-               currstate = CHECKSENSORS;               
+               currstate = CHECKSENSORS;
+               TIMERCOUNTER = 0;
                isMoving = 0;
                }
+               break;
 
 
         }
@@ -247,6 +394,24 @@ void _ISR _CNInterrupt(void)
 void __attribute__((__interrupt__, __shadow__)) _T1Interrupt(void)
 {
     IFS0bits.T1IF = 0;
+    if(currstate == KEEPLEFT || currstate ==CHECKSENSORS)
+    {
+       LEFTTURNS++;
+       TMR1 = 0;
+    }
+    else
+    {
+        T1CONbits.TON = 0;
+    }
+    if(currstate == KEEPLEFT || currstate ==CHECKSENSORS)
+    {
+       RIGHTTURNS++;
+       TMR1 = 0;
+    }
+    else
+    {
+        T1CONbits.TON = 0;
+    }
 
     if(currstate == YOUSPINMERIGHTROUND)
     {

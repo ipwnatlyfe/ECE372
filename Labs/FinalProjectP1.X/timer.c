@@ -51,3 +51,13 @@ void startTime() //HAVE TO USE A loop of 2 BECAUSE IM LAZY
     IEC0bits.T1IE = 1;
     T1CONbits.TON = 1;
 }
+
+void startTime2()
+{
+    TMR1 = 0;
+    PR1 = 100*ONE_MILLISECOND;
+    T1CONbits.TCKPS = 0b11;
+    IFS0bits.T1IF = 0;
+    IEC0bits.T1IE = 1;
+    T1CONbits.TON = 1;
+}
