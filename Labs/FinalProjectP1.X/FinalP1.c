@@ -40,6 +40,9 @@ volatile int TIMERCOUNTER = 0;
 volatile int STOPCOUNTER = 0;
 volatile int RIGHTTURNS = 0;
 volatile int LEFTTURNS = 0;
+volatile int STOPS = 0;
+volatile int TURNFROMSTOP;
+volatile int hasTurned;
 
 
 int main(void)
@@ -62,6 +65,7 @@ currstate = IDLE;
 prevstate = IDLE;
 nextstate = IDLE;
 isMoving = 0;
+hasTurned = 0;
 isPressed = 0;
 newRight = 0;
 newLeft = 0;
@@ -71,7 +75,7 @@ while(1)
     if (done == 1)
     {
         moveCursorLCD(0,0);
-        printVar = (adcValLeft);
+        printVar = (STOPS);
         sprintf(str, "%.3f", printVar);
         printStringLCD(str);
         done = 0;
@@ -96,24 +100,85 @@ while(1)
                     currstate  = FORWARD;
                }
 
-               else if(prevstate == TLEFT && adcValMiddle <500) // Keeps turning LEFT until middle hits the line again
+               else if(prevstate == TLEFT && adcValMiddle > 800 && hasTurned == 1 && TURNFROMSTOP == 1 && adcValRight < 500) // Keeps turning LEFT until middle hits the line again
                {
-                   currstate = TLEFT;
+                   hasTurned = 0;
+                   TURNFROMSTOP = 0;
+                   STOPS++;
+                   prevstate = FORWARD;
                }
 
-               else if(prevstate == TRIGHT && adcValMiddle <500) // Keeps turning RIGHT until middle hits the line again
+               else if(prevstate == TLEFT && adcValMiddle > 800 && hasTurned == 1 && adcValLeft < 500 && adcValRight < 500) // Keeps turning RIGHT until middle hits the line again
+               {
+                   hasTurned = 0;
+                   LEFTTURNS++;
+                   prevstate = FORWARD;
+               }
+
+               else if(prevstate == TLEFT && adcValLeft <500 && adcValMiddle > 800 && adcValRight < 500) // Keeps turning LEFT until middle hits the line again
+               {
+                   currstate = TLEFT;
+                   hasTurned = 1;
+               }
+
+               else if(prevstate == TLEFT && adcValMiddle > 800 && adcValRight <500 && adcValLeft >800) // Keeps turning RIGHT until middle hits the line again
+               {
+                   currstate = TLEFT;
+                   hasTurned = 1;
+
+               }
+
+               else if(prevstate == TLEFT && adcValMiddle > 800 && adcValRight > 800 && adcValLeft >800) // Keeps turning RIGHT until middle hits the line again
+               {
+                   currstate = TLEFT;
+
+               }
+
+               
+
+               
+              
+
+               else if(prevstate == TRIGHT && adcValMiddle > 800 && hasTurned == 1 && TURNFROMSTOP == 1 && adcValLeft < 500) // Keeps turning RIGHT until middle hits the line again
+               {
+                   hasTurned = 0;
+                   TURNFROMSTOP = 0;
+                   STOPS++;
+                   prevstate = FORWARD;
+               }
+
+               else if(prevstate == TRIGHT && adcValMiddle > 800 && hasTurned == 1 && adcValRight < 500 && adcValLeft < 500) // Keeps turning RIGHT until middle hits the line again
+               {
+                   hasTurned = 0;
+                   RIGHTTURNS++;
+                   prevstate = FORWARD;
+               }
+
+               else if(prevstate == TRIGHT && adcValLeft <500 && adcValMiddle > 800 && adcValRight < 500) // Keeps turning RIGHT until middle hits the line again
                {
                    currstate = TRIGHT;
+                   hasTurned = 1;
                }
+
+               else if(prevstate == TRIGHT && adcValMiddle > 800 && adcValRight > 800 && adcValLeft < 500) // Keeps turning RIGHT until middle hits the line again
+               {
+                   currstate = TRIGHT;
+                   hasTurned = 1;
+
+               }
+
+               else if(prevstate == TRIGHT && adcValMiddle > 800 && adcValRight > 800 && adcValLeft >800) // Keeps turning RIGHT until middle hits the line again
+               {
+                   currstate = TRIGHT;                   
+
+               }
+                           
                
                else if((adcValMiddle < 500) && (adcValLeft > 800) && (adcValRight < 500))// Conditions for adjusting  left
                {
                     currstate  = ADJUSTL;
                }
-               else if((adcValMiddle < 500) && (adcValLeft < 500) && (adcValRight < 500))// Goes forward if all sensors show reflection
-               {
-                    currstate  = FORWARD;
-               }
+              
                else if((adcValMiddle < 500) && (adcValLeft > 800) && (adcValRight >800))
                {
                     currstate  = FORWARD;
@@ -125,19 +190,43 @@ while(1)
                
                else if(((adcValMiddle > 800) && (adcValLeft > 800)  && (adcValRight > 800))) // If there's black across all sensors, then stop
                {
-                   currstate = STOP;
+                   TURNFROMSTOP = 1;
+                   if(STOPS == 3)
+                   {
+                        currstate = STOP;
+                   }
+                   else
+                   {
+                        currstate = TRIGHT;
+                     
+                   }
                }
 
                else if((adcValMiddle >800) && (adcValLeft > 800)  && (adcValRight < 500) )
                {
-                    currstate = TLEFT;
+                   if(LEFTTURNS < 4)
+                   {
+                     currstate = TLEFT;
+                   }
+                   else
+                   {
+                       currstate = FORWARD;
+                   }
                }
                else if((adcValMiddle > 800) && (adcValLeft <500 )  && (adcValRight > 800))
-               {                      
-                    currstate = TRIGHT;                                    
+               {
+                   if(RIGHTTURNS < 4)
+                   {
+                    currstate = TRIGHT;
+                   }
+                   else
+                   {
+                       currstate = FORWARD;
+                   }
                }               
                prevstate = CHECKSENSORS;
                break;
+               
            case FORWARD:
                if (isMoving == 0)
                 {
@@ -145,7 +234,7 @@ while(1)
                 isMoving = 1;
                 }
                OC1RS = 40;
-               OC2RS = 40;
+               OC2RS = 30;
                currstate = CHECKSENSORS;
                prevstate = FORWARD;
                break;
@@ -156,7 +245,7 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 35;
+               OC1RS = 40;
                OC2RS = 0;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTL;
@@ -169,7 +258,7 @@ while(1)
                 isMoving = 1;
                 }
                OC1RS = 0;
-               OC2RS = 35;
+               OC2RS = 40;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTR;
                break;
