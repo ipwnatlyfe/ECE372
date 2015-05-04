@@ -20,7 +20,7 @@ void sendI2C(char data, char address){
     while(IFS1bits.MI2C1IF == 0);
     IFS1bits.MI2C1IF = 0;
     //Address
-    I2C1TRN = address << 1 | WRITE;
+    I2C2TRN = address << 1 | WRITE;
     //wait
     while(I2C1STATbits.TRSTAT == 1);
     //Check for Ack
