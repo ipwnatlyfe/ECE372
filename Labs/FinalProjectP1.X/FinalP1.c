@@ -1,11 +1,16 @@
 #include "p24fj64ga002.h"
 #include "adc.h"
 #include "pwm.h"
-#include "lcd.h"
 #include "cn.h"
+#include "leds.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#define DARK 800
+#define LIGHT 100
+
+
 
 _CONFIG1( JTAGEN_OFF & GCP_OFF & GWRP_OFF & BKBUG_ON & COE_ON & ICS_PGx1 &
 FWDTEN_OFF & WINDIS_OFF & FWPSA_PR128 & WDTPS_PS32768 )
@@ -39,21 +44,23 @@ volatile int STOPS = 0;
 volatile int TURNFROMSTOP;
 volatile int hasTurned;
 volatile int SWITCHED=0;
+volatile int TESTCOUNTER=0;
 
 
 int main(void)
 {
 initADC();
-initLCD();
+initLEDs();
+//initLCD();
 initCNForSW1();
 
 
 TRISBbits.TRISB3 = 0;       // Pin 7 Output
-TRISBbits.TRISB9 = 0;       // Pin 18 Output
+TRISBbits.TRISB0 = 0;       // Pin 14 Output
 TRISBbits.TRISB10 = 0;       // Pin 11 to output to go backwards
-TRISBbits.TRISB8 = 0;       // Pin 17 to output to go backwards
+TRISBbits.TRISB11 = 0;       // Pin 22 to output to go backwards
 LATBbits.LATB3 = 0;         // Set pin 7 to low to create a voltage difference
-LATBbits.LATB9 = 0;         // Set pin 18 to low to create a voltage difference
+LATBbits.LATB0 = 0;         // Set pin 14 to low to create a voltage difference
 
 
 
@@ -67,13 +74,42 @@ isPressed = 0;
 
 while(1)
 {
+   
     if (done == 1)
     {
+        /*
         moveCursorLCD(0,0);
-        printVar = (STOPS);
+        printVar = (adcValRight);
         sprintf(str, "%.3f", printVar);
         printStringLCD(str);
+         * */
         done = 0;
+
+        if(adcValLeft > DARK)
+        {
+            LATBbits.LATB13 = 0;
+        }
+        else
+        {
+            LATBbits.LATB13 = 1;
+        }
+        if(adcValMiddle > DARK)
+        {
+            LATBbits.LATB14 = 0;
+        }
+        else
+        {
+            LATBbits.LATB14 = 1;
+        }
+        if(adcValRight > DARK)
+        {
+            LATBbits.LATB15= 0;
+        }
+        else
+        {
+            LATBbits.LATB15 = 1;
+        }
+
     }
 
        switch(currstate)
@@ -81,125 +117,86 @@ while(1)
             case IDLE:
                 OC1RS = 0;
                 OC2RS = 0;
-                moveCursorLCD(1,0);
-                printStringLCD("IDLE    ");
+                //moveCursorLCD(1,0);
+                //printStringLCD("IDLE    ");
                 isMoving = 0;
                 break;
 
            case CHECKSENSORS:
-               moveCursorLCD(1,0);
-               printStringLCD("CHECKING");
+              // moveCursorLCD(1,0);
+               //printStringLCD("CHECKING");
 
-               if(((adcValMiddle > 800) && (adcValLeft < 500) && (adcValRight < 500))|| ((adcValMiddle < 500) && (adcValLeft <500)  && (adcValRight < 500)))// Conditions for going straight
+               delayUs(5000);
+               if((adcValMiddle > DARK) && (adcValLeft < LIGHT) && (adcValRight < LIGHT))// Conditions for going straight
                {
                     currstate  = FORWARD;
                }
-               /******************************************************************************************
-                * The next few if statements are what needs to occur once the turn is complete
-                * The reason we need 2 different statements is we see if the reason we turned left is
-                * because of a full stop (3 sensors covered) or because of the right turn
-                * qualifications
-                * *****************************************************************************************/
-               else if(prevstate == TLEFT  && hasTurned == 1 && TURNFROMSTOP == 1 && SWITCHED == 1 && adcValLeft > 800) // Keeps turning LEFT until middle hits the line again
+
+               else if((adcValMiddle < LIGHT && adcValLeft < LIGHT && adcValRight < LIGHT) || (adcValLeft > DARK && adcValMiddle < LIGHT && adcValRight > DARK))
                {
-                   hasTurned = 0;
-                   TURNFROMSTOP = 0;
-                   STOPS++;
-                   SWITCHED = 0;
-                   currstate = FORWARD;
+                   currstate = prevstate;
+               }
+              
+               else if(prevstate == TLEFT)
+               {
+                   if(adcValLeft < LIGHT && adcValRight<LIGHT && adcValMiddle > DARK)
+                   {
+                       currstate = FORWARD;
+                       LEFTTURNS++;
+                   }
+                   else
+                   {
+                       currstate = TLEFT;
+                   }
+               }
+               else if(prevstate == TRIGHT)
+               {
+                   if(adcValLeft < LIGHT && adcValRight <LIGHT && adcValMiddle > DARK)
+                   {
+                       currstate = FORWARD;
+                       RIGHTTURNS++;
+                   }
+                   else
+                   {
+                       currstate = TRIGHT;
+                   }
                }
 
-               else if(prevstate == TLEFT  && hasTurned == 1 && SWITCHED == 1 && adcValLeft > 800) // Keeps turning RIGHT until middle hits the line again
+
+                else if((adcValMiddle >DARK) && (adcValLeft > DARK)  && (adcValRight < LIGHT) )      // If the left and middle sensor are over black, but the right sensor is over white
                {
-                   hasTurned = 0;
-                   LEFTTURNS++;
-                   SWITCHED = 0;
-                   currstate = FORWARD;
+                   if(LEFTTURNS < 1)
+                   {
+                        currstate = TLEFT;
+                   }
+                   else
+                   {
+                        currstate = TLEFT;
+                   }
                }
-               /******************************************************************************************
-                * Intermediate step for turning, we also have to make sure it keeps turning even when the left sensor
-                * is off the track we have to continue turning until the turn is complete. So we have a simple statement that keeps
-                * the robot in turn mode until the turn is complete.
-               ********************************************************************************************/
-               else if(prevstate == TLEFT && adcValLeft > 800 && SWITCHED == 0)
+               else if((adcValMiddle > DARK) && (adcValLeft <LIGHT )  && (adcValRight > DARK))      // If the right and middle sensor are over black, but the left sensor is over white
                {
-                   currstate = TLEFT;
-               }
-                /**************************************************************************************************
-                * Conditions below are to keep turning left, meaning the turn has not yet been completed.
-                * Due to the variety of turns we need to have conditions for where each sensor may be
-                * Have to learn how to legimately tell when the turn is completed
-                *****************************************************************************************************/
-               else if(prevstate == TLEFT && adcValLeft < 500)
-               {
-                   SWITCHED = 1;
-                   hasTurned = 1;
-                   currstate = TLEFT;
+                   if(RIGHTTURNS < 4)
+                   {
+                        currstate = TRIGHT;
+                   }
+                   else
+                   {
+                        currstate = TRIGHT;
+                   }
                }
 
-               /******************************************************************************************
-                * The next few if statements are what needs to occur once the turn is complete
-                * The reason we need 2 different statements is we see if the reason we turned right is
-                * because of a full stop (3 sensors covered) or because of the right turn
-                * qualifications
-                * *****************************************************************************************/
-                             
-              else if(prevstate == TRIGHT  && hasTurned == 1 && TURNFROMSTOP == 1 && SWITCHED == 1 && adcValRight > 800) // Keeps turning Right until middle hits the line again
-               {
-                   hasTurned = 0;
-                   TURNFROMSTOP = 0;
-                   STOPS++;
-                   SWITCHED = 0;
-                   currstate = FORWARD;
-               }
-
-               else if(prevstate == TRIGHT  && hasTurned == 1 && SWITCHED == 1 && adcValRight > 800) // Keeps turning RIGHT until middle hits the line again
-               {
-                   hasTurned = 0;
-                   RIGHTTURNS++;
-                   SWITCHED = 0;
-                   currstate = FORWARD;
-               }
-              /******************************************************************************************
-                * Intermediate step for turning, we also have to make sure it keeps turning even when the left sensor
-                * is off the track we have to continue turning until the turn is complete. So we have a simple statement that keeps
-                * the robot in turn mode until the turn is complete.
-               ********************************************************************************************/
-               else if(prevstate == TRIGHT && adcValRight > 800 && SWITCHED == 0)
-               {
-                   currstate = TRIGHT;
-               }
-
-               /**************************************************************************************************
-                * Conditions below are to keep turning left, meaning the turn has not yet been completed.
-                * Due to the variety of turns we need to have conditions for where each sensor may be
-                * Have to learn how to legimately tell when the turn is completed
-                *****************************************************************************************************/
-               else if(prevstate == TRIGHT && adcValRight < 500)
-               {
-                   SWITCHED = 1;
-                   hasTurned = 1;
-                   currstate = TRIGHT;
-               }
-
-               /***************************************************************************************************
-                * The below conditions are marely for adjustments and not for legitimately turning and such
-                *
-                *
-                *
-                * **************************************************************************************************/
-
-               else if((adcValMiddle < 500) && (adcValLeft > 800) && (adcValRight < 500))       // Conditions for adjusting  left
+               else if((adcValMiddle < LIGHT) && (adcValLeft > DARK) && (adcValRight < LIGHT))       // Conditions for adjusting  left
                {
                     currstate  = ADJUSTL;
                }
                             
-               else if((adcValMiddle < 500) && (adcValLeft < 500)  && (adcValRight > 800))      // Conditions for adjusting right
+               else if((adcValMiddle < LIGHT) && (adcValLeft < LIGHT)  && (adcValRight > DARK))      // Conditions for adjusting right
                {
                     currstate  = ADJUSTR;
                }
                
-               else if(((adcValMiddle > 800) && (adcValLeft > 800)  && (adcValRight > 800)))    // If there's black across all sensors, then stop
+               else if(((adcValMiddle > DARK) && (adcValLeft > DARK)  && (adcValRight > DARK)))    // If there's black across all sensors, then stop
                {
                    TURNFROMSTOP = 1;
                    if(STOPS == 3)
@@ -216,30 +213,11 @@ while(1)
                         currstate = TRIGHT;
                      
                    }
+
+                   STOPS++;
                }
 
-               else if((adcValMiddle >800) && (adcValLeft > 800)  && (adcValRight < 500) )      // If the left and middle sensor are over black, but the right sensor is over white
-               {
-                   if(LEFTTURNS < 4)
-                   {
-                        currstate = TLEFT;
-                   }
-                   else
-                   {
-                        currstate = FORWARD;
-                   }
-               }
-               else if((adcValMiddle > 800) && (adcValLeft <500 )  && (adcValRight > 800))      // If the right and middle sensor are over black, but the left sensor is over white
-               {
-                   if(RIGHTTURNS < 4)
-                   {
-                        currstate = TRIGHT;
-                   }
-                   else
-                   {
-                        currstate = FORWARD;
-                   }
-               }               
+                           
                prevstate = CHECKSENSORS;
                break;
     
@@ -252,21 +230,11 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               if(SWITCHED == 1 && adcValMiddle > 800 && adcValLeft > 800 && adcValRight > 800)
-               {
-                    OC1RS = 40;
-                    OC2RS = 30;
-                    currstate = FORWARD;
-                    prevstate = FORWARD;
-               }
-               else
-               {
-               OC1RS = 40;
-               OC2RS = 30;
+               
+               OC1RS = 30;
+               OC2RS = 35;
                currstate = CHECKSENSORS;
-               prevstate = FORWARD;
-               SWITCHED = 0;
-               }
+               prevstate = FORWARD;                             
                break;
 
            case ADJUSTL: 
@@ -275,8 +243,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 40;
-               OC2RS = 0;
+               OC1RS = 0;
+               OC2RS = 40;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTL;
                break;
@@ -287,8 +255,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 0;
-               OC2RS = 40;
+               OC1RS = 35;
+               OC2RS = 0;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTR;
                break;
@@ -299,8 +267,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 35;
-               OC2RS = 0;
+               OC1RS = 0;
+               OC2RS = 40;
                currstate = CHECKSENSORS;
                prevstate = TLEFT;
                break;
@@ -311,8 +279,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 0;
-               OC2RS = 35;
+               OC1RS = 35;
+               OC2RS = 0;
                currstate = CHECKSENSORS;
                prevstate = TRIGHT;
                break;

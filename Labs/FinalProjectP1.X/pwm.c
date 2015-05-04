@@ -2,19 +2,19 @@
 #include "pwm.h"
 
 #define TRIS_B3 TRISBbits.TRISB3
-#define TRIS_B9 TRISBbits.TRISB9
-#define TRIS_B8 TRISBbits.TRISB8
+#define TRIS_B0 TRISBbits.TRISB0
+#define TRIS_B11 TRISBbits.TRISB11
 #define TRIS_B10 TRISBbits.TRISB10
 
-#define LAT_B8 LATBbits.LATB8
+#define LAT_B11 LATBbits.LATB11
 #define LAT_B10 LATBbits.LATB10
 #define LAT_B3 LATBbits.LATB3
-#define LAT_B9 LATBbits.LATB9
+#define LAT_B0 LATBbits.LATB0
 
 #define RPOR_RP10R RPOR5bits.RP10R
 #define RPOR_RP3R RPOR1bits.RP3R
-#define RPOR_RP8R RPOR4bits.RP8R
-#define RPOR_RP9R RPOR4bits.RP9R
+#define RPOR_RP11R RPOR5bits.RP11R
+#define RPOR_RP0R RPOR0bits.RP0R
 
 #define RESET 0
 #define ON 1
@@ -30,10 +30,10 @@
 void initPWM(){
 
 RPOR_RP3R = RESET; // map OC1 to pin 7
-RPOR_RP9R = RESET; // map OC2 to pin 18
+RPOR_RP0R = RESET; // map OC2 to pin 18
 
 LAT_B3 = RESET; // Set pin 7 to low to create a voltage difference
-LAT_B9 = RESET; // Set pin 18 to low to create a voltage difference
+LAT_B0 = RESET; // Set pin 18 to low to create a voltage difference
 
 OC1CONbits.OCM = RESET;
 OC2CONbits.OCM = RESET;
@@ -50,7 +50,7 @@ TMR3 = RESET;
 PR3 = PR3_VAL;
 OC2CONbits.OCTSEL = ON; // using timer 3
 OC2CONbits.OCM = OCxCON_VAL;
-RPOR_RP8R = OC2; // map OC2 to pin 17
+RPOR_RP11R = OC2; // map OC2 to pin 17
 OC2R = RESET; //very important
 OC2RS = OCxRS_VAL;
 T3CONbits.TON = ON;
@@ -60,11 +60,11 @@ T3CONbits.TON = ON;
 void initPWMSpin(){
 
 RPOR_RP3R = RESET;
-RPOR_RP8R = RESET;
+RPOR_RP11R = RESET;
 
 
 LAT_B3 = RESET; // Set pin 7 to low to create a voltage difference
-LAT_B8 = RESET;
+LAT_B11 = RESET;
 
 
 OC1CONbits.OCM = RESET;
@@ -82,7 +82,7 @@ TMR3 = RESET;
 PR3 = PR3_VAL;
 OC2CONbits.OCTSEL = ON; // using timer 3
 OC2CONbits.OCM = OCxCON_VAL;
-RPOR_RP9R = OC2; // map OC2 to pin 17
+RPOR_RP0R = OC2; // map OC2 to pin 17
 OC2R = RESET; //very important
 OC2RS = OCxRS_VAL;
 T3CONbits.TON = ON;

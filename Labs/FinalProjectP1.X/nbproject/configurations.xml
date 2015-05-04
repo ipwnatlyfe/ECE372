@@ -6,9 +6,11 @@
                    projectFiles="true">
       <itemPath>adc.h</itemPath>
       <itemPath>cn.h</itemPath>
-      <itemPath>lcd.h</itemPath>
       <itemPath>pwm.h</itemPath>
       <itemPath>timer.h</itemPath>
+      <itemPath>leds.h</itemPath>
+      <itemPath>p24FJ64GA002.h</itemPath>
+      <itemPath>i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,10 +21,11 @@
                    projectFiles="true">
       <itemPath>adc.c</itemPath>
       <itemPath>cn.c</itemPath>
-      <itemPath>lcd.c</itemPath>
       <itemPath>pwm.c</itemPath>
       <itemPath>timer.c</itemPath>
       <itemPath>FinalP1.c</itemPath>
+      <itemPath>leds.c</itemPath>
+      <itemPath>i2c.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -166,6 +169,7 @@
         <property key="save-temps" value="false"/>
       </C30Global>
       <PICkit3PlatformTool>
+        <property key="firmware.download.all" value="false"/>
       </PICkit3PlatformTool>
     </conf>
   </confs>
