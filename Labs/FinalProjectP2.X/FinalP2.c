@@ -3,6 +3,7 @@
 #include "pwm.h"
 #include "cn.h"
 #include "leds.h"
+#include "lcd.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

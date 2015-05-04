@@ -5,9 +5,9 @@
             <name>FinalProjectP2</name>
             <creation-uuid>c49489e8-0e51-41f0-acf4-458588bb1773</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions/>
+            <c-extensions>c</c-extensions>
             <cpp-extensions/>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>

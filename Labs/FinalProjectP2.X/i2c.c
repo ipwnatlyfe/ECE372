@@ -5,13 +5,47 @@
 
 void initI2C(){
 //    Map the pins properly
-    TRISBbits.TRISB8 = 0;
-    TRISBbits.TRISB9 = 0; // probbably not necessary
+    int ClearBuffer;
 
-    I2C1CONbits.I2CEN = 1;
-    IFS1bits.MI2C1IF = 0;
+    I2C1CONbits.I2CEN = 0;  //Disable I2C
+    I2C1CONbits.DISSLW = 0; //Disable Slew Rate
+    IFS1bits.MI2C1IF = 0;   //Clear Flag
+    I2C1CONbits.I2CEN = 1;  //Enable I2C
+    ClearBuffer = I2C1RCV;  //Read Buffer to Clear it
     I2C1BRG = 10000;
 }
+
+void startI2C(){
+    int x = 0;
+    I2C1CONbits.ACKDT = 0;  //Clears Ack bit
+    delayUs(10);            //Delays for reset
+    I2C1CONbits.SEN = 1;    //Start condition
+
+    while (I2C1CONbits.SEN){//Apparently we have to wait until the start bit clears
+        x++;
+        delayUs(1);
+        if(x>30)
+        {
+            break; //makes sure that no endless loops are possible
+        }
+    }
+}
+
+void restartI2C(){
+    int x = 0;
+    I2C1CONbits.RSEN = 1;
+
+    while (I2C1CONbits.RSEN){//Apparently we have to wait until the restart bit clears
+        x++;
+        delayUs(1);
+        if(x>30)
+        {
+            break; //makes sure that no endless loops are possible
+        }
+    }
+}
+
+
 
 void sendI2C(char data, char address){
     //Start bit
@@ -20,7 +54,7 @@ void sendI2C(char data, char address){
     while(IFS1bits.MI2C1IF == 0);
     IFS1bits.MI2C1IF = 0;
     //Address
-    I2C2TRN = address << 1 | WRITE;
+    I2C1TRN = address << 1 | WRITE;
     //wait
     while(I2C1STATbits.TRSTAT == 1);
     //Check for Ack
