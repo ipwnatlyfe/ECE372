@@ -8,7 +8,7 @@
 #include <math.h>
 
 #define DARK 800
-#define LIGHT 100
+#define LIGHT 500
 
 
 
@@ -45,6 +45,7 @@ volatile int TURNFROMSTOP;
 volatile int hasTurned;
 volatile int SWITCHED=0;
 volatile int TESTCOUNTER=0;
+volatile int STATECOUNTER = 0;
 
 
 int main(void)
@@ -126,7 +127,7 @@ while(1)
               // moveCursorLCD(1,0);
                //printStringLCD("CHECKING");
 
-               delayUs(5000);
+               //delayUs(5000);
                if((adcValMiddle > DARK) && (adcValLeft < LIGHT) && (adcValRight < LIGHT))// Conditions for going straight
                {
                     currstate  = FORWARD;
@@ -156,6 +157,7 @@ while(1)
                        currstate = FORWARD;
                        RIGHTTURNS++;
                    }
+                   
                    else
                    {
                        currstate = TRIGHT;
@@ -165,13 +167,13 @@ while(1)
 
                 else if((adcValMiddle >DARK) && (adcValLeft > DARK)  && (adcValRight < LIGHT) )      // If the left and middle sensor are over black, but the right sensor is over white
                {
-                   if(LEFTTURNS < 1)
+                   if(LEFTTURNS < 3)
                    {
                         currstate = TLEFT;
                    }
                    else
                    {
-                        currstate = TLEFT;
+                        currstate = FORWARD;
                    }
                }
                else if((adcValMiddle > DARK) && (adcValLeft <LIGHT )  && (adcValRight > DARK))      // If the right and middle sensor are over black, but the left sensor is over white
@@ -182,7 +184,7 @@ while(1)
                    }
                    else
                    {
-                        currstate = TRIGHT;
+                        currstate = FORWARD;
                    }
                }
 
@@ -214,7 +216,7 @@ while(1)
                      
                    }
 
-                   STOPS++;
+                   //STOPS++;
                }
 
                            
@@ -231,8 +233,8 @@ while(1)
                 isMoving = 1;
                 }
                
-               OC1RS = 30;
-               OC2RS = 35;
+               OC1RS = 35;
+               OC2RS = 45;
                currstate = CHECKSENSORS;
                prevstate = FORWARD;                             
                break;
@@ -243,8 +245,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 0;
-               OC2RS = 40;
+               OC1RS = 00;
+               OC2RS = 45;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTL;
                break;
@@ -255,8 +257,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 35;
-               OC2RS = 0;
+               OC1RS = 45;
+               OC2RS = 00;
                currstate = CHECKSENSORS;
                prevstate = ADJUSTR;
                break;
@@ -267,8 +269,8 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 0;
-               OC2RS = 40;
+               OC1RS = 00;
+               OC2RS = 45;
                currstate = CHECKSENSORS;
                prevstate = TLEFT;
                break;
@@ -279,8 +281,13 @@ while(1)
                 initPWM();
                 isMoving = 1;
                 }
-               OC1RS = 35;
-               OC2RS = 0;
+                else if((adcValMiddle > DARK) && (adcValLeft > DARK)  && (adcValRight > DARK) && prevstate != TRIGHT)
+                   {
+                       currstate = TRIGHT;
+                       STOPS++;
+                   }
+               OC1RS = 45;
+               OC2RS = 00;
                currstate = CHECKSENSORS;
                prevstate = TRIGHT;
                break;

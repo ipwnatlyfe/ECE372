@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=adc.c cn.c pwm.c timer.c FinalP1.c leds.c i2c.c
+SOURCEFILES_QUOTED_IF_SPACED=adc.c cn.c pwm.c timer.c FinalP1.c leds.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adc.o ${OBJECTDIR}/cn.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/FinalP1.o ${OBJECTDIR}/leds.o ${OBJECTDIR}/i2c.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/adc.o.d ${OBJECTDIR}/cn.o.d ${OBJECTDIR}/pwm.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/FinalP1.o.d ${OBJECTDIR}/leds.o.d ${OBJECTDIR}/i2c.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adc.o ${OBJECTDIR}/cn.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/FinalP1.o ${OBJECTDIR}/leds.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/adc.o.d ${OBJECTDIR}/cn.o.d ${OBJECTDIR}/pwm.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/FinalP1.o.d ${OBJECTDIR}/leds.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/adc.o ${OBJECTDIR}/cn.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/FinalP1.o ${OBJECTDIR}/leds.o ${OBJECTDIR}/i2c.o
+OBJECTFILES=${OBJECTDIR}/adc.o ${OBJECTDIR}/cn.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/FinalP1.o ${OBJECTDIR}/leds.o
 
 # Source Files
-SOURCEFILES=adc.c cn.c pwm.c timer.c FinalP1.c leds.c i2c.c
+SOURCEFILES=adc.c cn.c pwm.c timer.c FinalP1.c leds.c
 
 
 CFLAGS=
@@ -124,13 +124,6 @@ ${OBJECTDIR}/leds.o: leds.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE)  leds.c  -o ${OBJECTDIR}/leds.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/leds.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/leds.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/i2c.o: i2c.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/i2c.o.d 
-	@${RM} ${OBJECTDIR}/i2c.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  i2c.c  -o ${OBJECTDIR}/i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/i2c.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/i2c.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
 else
 ${OBJECTDIR}/adc.o: adc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -173,13 +166,6 @@ ${OBJECTDIR}/leds.o: leds.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/leds.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  leds.c  -o ${OBJECTDIR}/leds.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/leds.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/leds.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/i2c.o: i2c.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/i2c.o.d 
-	@${RM} ${OBJECTDIR}/i2c.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  i2c.c  -o ${OBJECTDIR}/i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/i2c.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/i2c.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
