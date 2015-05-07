@@ -255,7 +255,7 @@ void initI2C(){
 
     I2C2CONbits.I2CEN = 1;
     IFS3bits.MI2C2IF = 0;
-    I2C2BRG = 10000;
+    I2C2BRG = 500;
     AD1PCFG = 0xFFFF;
 }
 
@@ -352,6 +352,7 @@ char receiveI2C(char i2c_address){
 
 char get_data(char i2c_address, int data_address){
     char c;
+    int i = 0;
     I2C2CONbits.SEN = 1;
     while(I2C2CONbits.SEN);
     I2C2TRN = i2c_address << 1 | WRITE;
@@ -361,21 +362,23 @@ char get_data(char i2c_address, int data_address){
     I2C2TRN = (data_address << 8) >> 8;
     while(I2C2STATbits.TBF || I2C2STATbits.TRSTAT);
     I2C2CONbits.PEN = 1;
-    //wait
     while(I2C2CONbits.PEN);
+    for(i = 0; i < 1000; i++){ 
+        delayUs(1000);
+    }
     I2C2CONbits.SEN = 1;
-    //wait
     while(I2C2CONbits.SEN);
     I2C2TRN = (i2c_address << 1) | READ;
     while(I2C2STATbits.TBF || I2C2STATbits.TRSTAT);
-//    while(I2C2STATbits.ACKSTAT);
+    while(I2C2STATbits.ACKSTAT);
     I2C2CONbits.RCEN = 1;
     while(I2C2STATbits.RBF == 0);
     c = I2C2RCV;
+    if(I2C2STATbits.IWCOL == 1) I2C2STATbits.IWCOL = 0;
     I2C2CONbits.ACKDT = 1; //ACK or NACK
     I2C2CONbits.ACKEN = 1; //enable acknowledge
+    I2C2CONbits.PEN = 1;
     while(I2C2CONbits.PEN);
-    printStringLCD("hi");
     return c;
 }
 

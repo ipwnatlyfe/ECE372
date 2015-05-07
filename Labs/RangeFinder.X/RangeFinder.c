@@ -56,13 +56,12 @@ int VL6180X_Clear_Interrupts() {
 
 int main(void)
 {
-    initLCD();
+//    initLCD();
     initI2C();
     int range;
     static char str[15];
 
-
-    writeI2C(addr, 0x0207, 0x01);
+    writeI2C(addr,0x0207, 0x01);
     writeI2C(addr,0x0208, 0x01);
     writeI2C(addr,0x0096, 0x00);
     writeI2C(addr,0x0097, 0xfd);
@@ -102,7 +101,7 @@ int main(void)
 
     while (1){
 
-       range=get_data(0x29, 0x0000);
+        range=get_data(0x29, 0x0000);
 
         
          // start single range measurement
@@ -117,11 +116,11 @@ int main(void)
          // clear the interrupt on VL6180X
          VL6180X_Clear_Interrupts();
 
-         /*
-         moveCursorLCD(0,0);
-         sprintf(str, "%d", range);
-         printStringLCD(str);
-        */
+         
+//         moveCursorLCD(0,0);
+//         sprintf(str, "%d", range);
+//         printStringLCD(str);
+        
          delayUs(10);
          
  }

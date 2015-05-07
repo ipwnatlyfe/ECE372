@@ -25,11 +25,11 @@ Command:
   build/default/debug/timer.o \
   build/default/debug/RangeFinder.o \
   build/default/debug/i2c.o \
-  -TC:\Users\Steven\AppData\Local\Temp\tmp000022f8.00 \
-  -TC:\Users\Steven\AppData\Local\Temp\tmp000022f8.01 \
-  -TC:\Users\Steven\AppData\Local\Temp\tmp000022f8.02 \
-  -TC:\Users\Steven\AppData\Local\Temp\tmp000022f8.03 \
-  -TC:\Users\Steven\AppData\Local\Temp\tmp000022f8.04 \
+  -TC:\Users\Steven\AppData\Local\Temp\tmp00002338.00 \
+  -TC:\Users\Steven\AppData\Local\Temp\tmp00002338.01 \
+  -TC:\Users\Steven\AppData\Local\Temp\tmp00002338.02 \
+  -TC:\Users\Steven\AppData\Local\Temp\tmp00002338.03 \
+  -TC:\Users\Steven\AppData\Local\Temp\tmp00002338.04 \
   --defsym=__MPLAB_BUILD=1 \
   --defsym=__MPLAB_DEBUG=1 \
   --defsym=__DEBUG=1 \
@@ -67,11 +67,11 @@ Program Memory  [Origin = 0x200, Length = 0xa9fc]
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200                0x9e            0xed  (237)
-.const                       0x29e                 0xc            0x12  (18)
-.text                        0x2aa               0x612           0x91b  (2331)
-.dinit                       0x8bc                 0x8             0xc  (12)
+.const                       0x29e                 0x8             0xc  (12)
+.text                        0x2a6               0x63e           0x95d  (2397)
+.dinit                       0x8e4                 0x8             0xc  (12)
 
-                     Total program memory used (bytes):          0xa26  (2598) 3%
+                     Total program memory used (bytes):          0xa62  (2658) 4%
 
 
 Data Memory  [Origin = 0x800, Length = 0x2000]
@@ -113,56 +113,56 @@ External Symbols in Program Memory (by address):
                   0x00023c                  __data_init_standard
                   0x00023c                  __data_init
                   0x00029a                  __DefaultInterrupt
-                  0x0002aa                  _initI2C
-                  0x0002c4                  _sendI2C
-                  0x00030e                  _writeI2C
-                  0x0003b8                  _receiveI2C
-                  0x000412                  _get_data
-                  0x0004d6                  _writeFourBits
-                  0x00053a                  _writeLCD
-                  0x00055a                  _printCharLCD
-                  0x00056c                  _initLCD
-                  0x0005c6                  _printStringLCD
-                  0x0005ee                  _clearLCD
-                  0x0005fc                  _moveCursorLCD
-                  0x00063a                  _testLCD
-                  0x000696                  _VL6180X_Start_Range
-                  0x0006a8                  _VL6180X_Poll_Range
-                  0x0006d6                  _VL6180X_Read_Range
-                  0x0006ec                  _VL6180X_Clear_Interrupts
-                  0x0006fe                  _main
-                  0x000842                  _delayUs
-                  0x000870                  _Timer1Delay
-                  0x0008a0                  _startTime
+                  0x0002a6                  _initI2C
+                  0x0002c0                  _sendI2C
+                  0x00030a                  _writeI2C
+                  0x0003b4                  _receiveI2C
+                  0x00040e                  _get_data
+                  0x000500                  _writeFourBits
+                  0x000564                  _writeLCD
+                  0x000584                  _printCharLCD
+                  0x000596                  _initLCD
+                  0x0005f0                  _printStringLCD
+                  0x000618                  _clearLCD
+                  0x000626                  _moveCursorLCD
+                  0x000664                  _testLCD
+                  0x0006c0                  _VL6180X_Start_Range
+                  0x0006d2                  _VL6180X_Poll_Range
+                  0x000700                  _VL6180X_Read_Range
+                  0x000716                  _VL6180X_Clear_Interrupts
+                  0x000728                  _main
+                  0x00086a                  _delayUs
+                  0x000898                  _Timer1Delay
+                  0x0008c8                  _startTime
 
 External Symbols in Program Memory (by name):
 
-                  0x000870                  _Timer1Delay
-                  0x0006ec                  _VL6180X_Clear_Interrupts
-                  0x0006a8                  _VL6180X_Poll_Range
-                  0x0006d6                  _VL6180X_Read_Range
-                  0x000696                  _VL6180X_Start_Range
+                  0x000898                  _Timer1Delay
+                  0x000716                  _VL6180X_Clear_Interrupts
+                  0x0006d2                  _VL6180X_Poll_Range
+                  0x000700                  _VL6180X_Read_Range
+                  0x0006c0                  _VL6180X_Start_Range
                   0x00029a                  __DefaultInterrupt
                   0x00023c                  __data_init
                   0x00023c                  __data_init_standard
                   0x00022c                  __psv_init
                   0x000200                  __resetPRI
-                  0x0005ee                  _clearLCD
-                  0x000842                  _delayUs
-                  0x000412                  _get_data
-                  0x0002aa                  _initI2C
-                  0x00056c                  _initLCD
-                  0x0006fe                  _main
-                  0x0005fc                  _moveCursorLCD
-                  0x00055a                  _printCharLCD
-                  0x0005c6                  _printStringLCD
-                  0x0003b8                  _receiveI2C
-                  0x0002c4                  _sendI2C
-                  0x0008a0                  _startTime
-                  0x00063a                  _testLCD
-                  0x0004d6                  _writeFourBits
-                  0x00030e                  _writeI2C
-                  0x00053a                  _writeLCD
+                  0x000618                  _clearLCD
+                  0x00086a                  _delayUs
+                  0x00040e                  _get_data
+                  0x0002a6                  _initI2C
+                  0x000596                  _initLCD
+                  0x000728                  _main
+                  0x000626                  _moveCursorLCD
+                  0x000584                  _printCharLCD
+                  0x0005f0                  _printStringLCD
+                  0x0003b4                  _receiveI2C
+                  0x0002c0                  _sendI2C
+                  0x0008c8                  _startTime
+                  0x000664                  _testLCD
+                  0x000500                  _writeFourBits
+                  0x00030a                  _writeI2C
+                  0x000564                  _writeLCD
 
 Memory Configuration
 
@@ -263,12 +263,12 @@ __CONFIG1         0x00abfe          0x2
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x18c1
+.debug_info       0x000000       0x18ce
  *(.debug_info)
  .debug_info      0x000000        0x619 build/default/debug/lcd.o
  .debug_info      0x000619        0x696 build/default/debug/timer.o
  .debug_info      0x000caf        0x28b build/default/debug/RangeFinder.o
- .debug_info      0x000f3a        0x987 build/default/debug/i2c.o
+ .debug_info      0x000f3a        0x994 build/default/debug/i2c.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000        0x3e4
@@ -278,12 +278,12 @@ __CONFIG1         0x00abfe          0x2
  .debug_abbrev    0x000215         0x9d build/default/debug/RangeFinder.o
  .debug_abbrev    0x0002b2        0x132 build/default/debug/i2c.o
 
-.debug_line       0x000000        0x9cb
+.debug_line       0x000000        0x9f3
  *(.debug_line)
  .debug_line      0x000000        0x2af build/default/debug/lcd.o
  .debug_line      0x0002af        0x137 build/default/debug/timer.o
- .debug_line      0x0003e6        0x27f build/default/debug/RangeFinder.o
- .debug_line      0x000665        0x366 build/default/debug/i2c.o
+ .debug_line      0x0003e6        0x277 build/default/debug/RangeFinder.o
+ .debug_line      0x00065d        0x396 build/default/debug/i2c.o
 
 .debug_frame      0x000000        0x1a0
  *(.debug_frame)
@@ -1200,36 +1200,35 @@ __c30_signature
  .nbss              0x0850         0x12 build/default/debug/RangeFinder.o
                     0x0850                  _counter
 
-.const              0x829e          0xc load address 0x00029e  
+.const              0x829e          0x8 load address 0x00029e  
  .const             0x829e          0x8 build/default/debug/lcd.o
- .const             0x82a6          0x4 build/default/debug/i2c.o
 
-.text             0x0002aa        0x612
- .text            0x0002aa        0x22c build/default/debug/i2c.o
-                  0x0002aa                  _initI2C
-                  0x0002c4                  _sendI2C
-                  0x00030e                  _writeI2C
-                  0x0003b8                  _receiveI2C
-                  0x000412                  _get_data
- .text            0x0004d6        0x1c0 build/default/debug/lcd.o
-                  0x0004d6                  _writeFourBits
-                  0x00053a                  _writeLCD
-                  0x00055a                  _printCharLCD
-                  0x00056c                  _initLCD
-                  0x0005c6                  _printStringLCD
-                  0x0005ee                  _clearLCD
-                  0x0005fc                  _moveCursorLCD
-                  0x00063a                  _testLCD
- .text            0x000696        0x1ac build/default/debug/RangeFinder.o
-                  0x000696                  _VL6180X_Start_Range
-                  0x0006a8                  _VL6180X_Poll_Range
-                  0x0006d6                  _VL6180X_Read_Range
-                  0x0006ec                  _VL6180X_Clear_Interrupts
-                  0x0006fe                  _main
- .text            0x000842         0x7a build/default/debug/timer.o
-                  0x000842                  _delayUs
-                  0x000870                  _Timer1Delay
-                  0x0008a0                  _startTime
+.text             0x0002a6        0x63e
+ .text            0x0002a6        0x25a build/default/debug/i2c.o
+                  0x0002a6                  _initI2C
+                  0x0002c0                  _sendI2C
+                  0x00030a                  _writeI2C
+                  0x0003b4                  _receiveI2C
+                  0x00040e                  _get_data
+ .text            0x000500        0x1c0 build/default/debug/lcd.o
+                  0x000500                  _writeFourBits
+                  0x000564                  _writeLCD
+                  0x000584                  _printCharLCD
+                  0x000596                  _initLCD
+                  0x0005f0                  _printStringLCD
+                  0x000618                  _clearLCD
+                  0x000626                  _moveCursorLCD
+                  0x000664                  _testLCD
+ .text            0x0006c0        0x1aa build/default/debug/RangeFinder.o
+                  0x0006c0                  _VL6180X_Start_Range
+                  0x0006d2                  _VL6180X_Poll_Range
+                  0x000700                  _VL6180X_Read_Range
+                  0x000716                  _VL6180X_Clear_Interrupts
+                  0x000728                  _main
+ .text            0x00086a         0x7a build/default/debug/timer.o
+                  0x00086a                  _delayUs
+                  0x000898                  _Timer1Delay
+                  0x0008c8                  _startTime
 
-.dinit            0x0008bc          0x8
- .dinit           0x0008bc          0x8 data_init
+.dinit            0x0008e4          0x8
+ .dinit           0x0008e4          0x8 data_init
