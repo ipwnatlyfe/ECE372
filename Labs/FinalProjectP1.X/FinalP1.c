@@ -78,12 +78,6 @@ while(1)
    
     if (done == 1)
     {
-        /*
-        moveCursorLCD(0,0);
-        printVar = (adcValRight);
-        sprintf(str, "%.3f", printVar);
-        printStringLCD(str);
-         * */
         done = 0;
 
         if(adcValLeft > DARK)
@@ -118,16 +112,11 @@ while(1)
             case IDLE:
                 OC1RS = 0;
                 OC2RS = 0;
-                //moveCursorLCD(1,0);
-                //printStringLCD("IDLE    ");
                 isMoving = 0;
                 break;
 
            case CHECKSENSORS:
-              // moveCursorLCD(1,0);
-               //printStringLCD("CHECKING");
 
-               //delayUs(5000);
                if((adcValMiddle > DARK) && (adcValLeft < LIGHT) && (adcValRight < LIGHT))// Conditions for going straight
                {
                     currstate  = FORWARD;
@@ -216,7 +205,7 @@ while(1)
                      
                    }
 
-                   //STOPS++;
+
                }
 
                            

@@ -3,6 +3,7 @@
  * Authors:
  *
  * Created on December 31, 2014, 1:39 PM
+ * This may not need to be used for the final project
  */
 
 #include "p24fj64ga002.h"

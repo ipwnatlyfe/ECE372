@@ -71,7 +71,7 @@ void sendI2C(char data, char address){
     while(IFS1bits.MI2C1IF == 0);
     IFS1bits.MI2C1IF = 0;
 }
-
+//Had to modify this to work with the supplied version of I2C communication
 char receiveI2C(char address){
     char c;
     //Start bit

@@ -1,7 +1,7 @@
 /*
  * File:   lcd.h
  * Authors:
- *
+ *  May not be needed for final project
  * Created on December 31, 2014, 1:39 PM
  */
 

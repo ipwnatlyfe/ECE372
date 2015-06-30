@@ -79,7 +79,7 @@ while(1)
 {
 
     delayUs(1000);
-       switch(currstate)
+       switch(currstate)  // New switch statement has limited logic to deal with the new component being added
         {
             case IDLE:
                 OC1RS = 0;
